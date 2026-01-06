@@ -1,0 +1,43 @@
+﻿@page "/comments"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using BestRecipes.Domain
+@using BestRecipes.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="comments/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.Comment">
+    <PropertyColumn Property="comment => comment.Content" />
+    <PropertyColumn Property="comment => comment.Date" />
+    <PropertyColumn Property="comment => comment.UserId" />
+    <PropertyColumn Property="comment => comment.RecipeId" />
+    <PropertyColumn Property="comment => comment.DateCreated" />
+    <PropertyColumn Property="comment => comment.DateUpdated" />
+    <PropertyColumn Property="comment => comment.CreatedBy" />
+    <PropertyColumn Property="comment => comment.UpdatedBy" />
+
+    <TemplateColumn Context="comment">
+        <a href="@($"comments/edit?id={comment.Id}")">Edit</a> |
+        <a href="@($"comments/details?id={comment.Id}")">Details</a> |
+        <a href="@($"comments/delete?id={comment.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private BestRecipesContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

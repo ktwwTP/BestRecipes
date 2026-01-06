@@ -1,0 +1,79 @@
+﻿@page "/favourites/create"
+@using Microsoft.EntityFrameworkCore
+@using BestRecipes.Domain
+@inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>Favourite</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Favourite" OnValidSubmit="AddFavourite" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="userid" class="form-label">UserId:</label> 
+                <InputNumber id="userid" @bind-Value="Favourite.UserId" class="form-control" /> 
+                <ValidationMessage For="() => Favourite.UserId" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="recipeid" class="form-label">RecipeId:</label> 
+                <InputNumber id="recipeid" @bind-Value="Favourite.RecipeId" class="form-control" /> 
+                <ValidationMessage For="() => Favourite.RecipeId" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="categoryid" class="form-label">CategoryId:</label> 
+                <InputNumber id="categoryid" @bind-Value="Favourite.CategoryId" class="form-control" /> 
+                <ValidationMessage For="() => Favourite.CategoryId" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="date" class="form-label">Date:</label> 
+                <InputDate id="date" @bind-Value="Favourite.Date" class="form-control" /> 
+                <ValidationMessage For="() => Favourite.Date" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="datecreated" class="form-label">DateCreated:</label> 
+                <InputDate id="datecreated" @bind-Value="Favourite.DateCreated" class="form-control" /> 
+                <ValidationMessage For="() => Favourite.DateCreated" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="dateupdated" class="form-label">DateUpdated:</label> 
+                <InputDate id="dateupdated" @bind-Value="Favourite.DateUpdated" class="form-control" /> 
+                <ValidationMessage For="() => Favourite.DateUpdated" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="createdby" class="form-label">CreatedBy:</label> 
+                <InputText id="createdby" @bind-Value="Favourite.CreatedBy" class="form-control" /> 
+                <ValidationMessage For="() => Favourite.CreatedBy" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="updatedby" class="form-label">UpdatedBy:</label> 
+                <InputText id="updatedby" @bind-Value="Favourite.UpdatedBy" class="form-control" /> 
+                <ValidationMessage For="() => Favourite.UpdatedBy" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/favourites">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private Favourite Favourite { get; set; } = new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddFavourite()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Favourite.Add(Favourite);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/favourites");
+    }
+}

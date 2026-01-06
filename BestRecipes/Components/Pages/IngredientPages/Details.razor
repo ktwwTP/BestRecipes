@@ -1,0 +1,60 @@
+﻿@page "/ingredients/details"
+@using Microsoft.EntityFrameworkCore
+@using BestRecipes.Domain
+@inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>Ingredient</h2>
+    <hr />
+    @if (ingredient is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Name</dt>
+            <dd class="col-sm-10">@ingredient.Name</dd>
+            <dt class="col-sm-2">UpVote</dt>
+            <dd class="col-sm-10">@ingredient.UpVote</dd>
+            <dt class="col-sm-2">DownVote</dt>
+            <dd class="col-sm-10">@ingredient.DownVote</dd>
+            <dt class="col-sm-2">UnitOfMeasurement</dt>
+            <dd class="col-sm-10">@ingredient.UnitOfMeasurement</dd>
+            <dt class="col-sm-2">DateCreated</dt>
+            <dd class="col-sm-10">@ingredient.DateCreated</dd>
+            <dt class="col-sm-2">DateUpdated</dt>
+            <dd class="col-sm-10">@ingredient.DateUpdated</dd>
+            <dt class="col-sm-2">CreatedBy</dt>
+            <dd class="col-sm-10">@ingredient.CreatedBy</dd>
+            <dt class="col-sm-2">UpdatedBy</dt>
+            <dd class="col-sm-10">@ingredient.UpdatedBy</dd>
+        </dl>
+        <div>
+            <a href="@($"/ingredients/edit?id={ingredient.Id}")">Edit</a> |
+            <a href="@($"/ingredients")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Ingredient? ingredient;
+
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        ingredient = await context.Ingredient.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (ingredient is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

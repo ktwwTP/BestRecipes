@@ -1,0 +1,43 @@
+﻿@page "/favourites"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using BestRecipes.Domain
+@using BestRecipes.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="favourites/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.Favourite">
+    <PropertyColumn Property="favourite => favourite.UserId" />
+    <PropertyColumn Property="favourite => favourite.RecipeId" />
+    <PropertyColumn Property="favourite => favourite.CategoryId" />
+    <PropertyColumn Property="favourite => favourite.Date" />
+    <PropertyColumn Property="favourite => favourite.DateCreated" />
+    <PropertyColumn Property="favourite => favourite.DateUpdated" />
+    <PropertyColumn Property="favourite => favourite.CreatedBy" />
+    <PropertyColumn Property="favourite => favourite.UpdatedBy" />
+
+    <TemplateColumn Context="favourite">
+        <a href="@($"favourites/edit?id={favourite.Id}")">Edit</a> |
+        <a href="@($"favourites/details?id={favourite.Id}")">Details</a> |
+        <a href="@($"favourites/delete?id={favourite.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private BestRecipesContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

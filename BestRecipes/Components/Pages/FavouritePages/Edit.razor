@@ -1,0 +1,124 @@
+﻿@page "/favourites/edit"
+@using Microsoft.EntityFrameworkCore
+@using BestRecipes.Domain
+@inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>Favourite</h2>
+<hr />
+@if (Favourite is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Favourite" OnValidSubmit="UpdateFavourite" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="Favourite.Id" value="@Favourite.Id" />
+                <div class="mb-3">
+                    <label for="userid" class="form-label">UserId:</label>
+                    <InputNumber id="userid" @bind-Value="Favourite.UserId" class="form-control" />
+                    <ValidationMessage For="() => Favourite.UserId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="recipeid" class="form-label">RecipeId:</label>
+                    <InputNumber id="recipeid" @bind-Value="Favourite.RecipeId" class="form-control" />
+                    <ValidationMessage For="() => Favourite.RecipeId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="categoryid" class="form-label">CategoryId:</label>
+                    <InputNumber id="categoryid" @bind-Value="Favourite.CategoryId" class="form-control" />
+                    <ValidationMessage For="() => Favourite.CategoryId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="date" class="form-label">Date:</label>
+                    <InputDate id="date" @bind-Value="Favourite.Date" class="form-control" />
+                    <ValidationMessage For="() => Favourite.Date" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="datecreated" class="form-label">DateCreated:</label>
+                    <InputDate id="datecreated" @bind-Value="Favourite.DateCreated" class="form-control" />
+                    <ValidationMessage For="() => Favourite.DateCreated" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="dateupdated" class="form-label">DateUpdated:</label>
+                    <InputDate id="dateupdated" @bind-Value="Favourite.DateUpdated" class="form-control" />
+                    <ValidationMessage For="() => Favourite.DateUpdated" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="createdby" class="form-label">CreatedBy:</label>
+                    <InputText id="createdby" @bind-Value="Favourite.CreatedBy" class="form-control" />
+                    <ValidationMessage For="() => Favourite.CreatedBy" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="updatedby" class="form-label">UpdatedBy:</label>
+                    <InputText id="updatedby" @bind-Value="Favourite.UpdatedBy" class="form-control" />
+                    <ValidationMessage For="() => Favourite.UpdatedBy" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/favourites">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private Favourite? Favourite { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        Favourite ??= await context.Favourite.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (Favourite is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateFavourite()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(Favourite!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!FavouriteExists(Favourite!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/favourites");
+    }
+
+    private bool FavouriteExists(int id)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.Favourite.Any(e => e.Id == id);
+    }
+}

@@ -1,0 +1,43 @@
+﻿@page "/challenges"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using BestRecipes.Domain
+@using BestRecipes.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="challenges/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.Challenge">
+    <PropertyColumn Property="challenge => challenge.Name" />
+    <PropertyColumn Property="challenge => challenge.Details" />
+    <PropertyColumn Property="challenge => challenge.StartDate" />
+    <PropertyColumn Property="challenge => challenge.EndDate" />
+    <PropertyColumn Property="challenge => challenge.DateCreated" />
+    <PropertyColumn Property="challenge => challenge.DateUpdated" />
+    <PropertyColumn Property="challenge => challenge.CreatedBy" />
+    <PropertyColumn Property="challenge => challenge.UpdatedBy" />
+
+    <TemplateColumn Context="challenge">
+        <a href="@($"challenges/edit?id={challenge.Id}")">Edit</a> |
+        <a href="@($"challenges/details?id={challenge.Id}")">Details</a> |
+        <a href="@($"challenges/delete?id={challenge.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private BestRecipesContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

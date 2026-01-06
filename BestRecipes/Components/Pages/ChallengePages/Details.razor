@@ -1,0 +1,60 @@
+﻿@page "/challenges/details"
+@using Microsoft.EntityFrameworkCore
+@using BestRecipes.Domain
+@inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>Challenge</h2>
+    <hr />
+    @if (challenge is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Name</dt>
+            <dd class="col-sm-10">@challenge.Name</dd>
+            <dt class="col-sm-2">Details</dt>
+            <dd class="col-sm-10">@challenge.Details</dd>
+            <dt class="col-sm-2">StartDate</dt>
+            <dd class="col-sm-10">@challenge.StartDate</dd>
+            <dt class="col-sm-2">EndDate</dt>
+            <dd class="col-sm-10">@challenge.EndDate</dd>
+            <dt class="col-sm-2">DateCreated</dt>
+            <dd class="col-sm-10">@challenge.DateCreated</dd>
+            <dt class="col-sm-2">DateUpdated</dt>
+            <dd class="col-sm-10">@challenge.DateUpdated</dd>
+            <dt class="col-sm-2">CreatedBy</dt>
+            <dd class="col-sm-10">@challenge.CreatedBy</dd>
+            <dt class="col-sm-2">UpdatedBy</dt>
+            <dd class="col-sm-10">@challenge.UpdatedBy</dd>
+        </dl>
+        <div>
+            <a href="@($"/challenges/edit?id={challenge.Id}")">Edit</a> |
+            <a href="@($"/challenges")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Challenge? challenge;
+
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        challenge = await context.Challenge.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (challenge is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

@@ -1,0 +1,60 @@
+﻿@page "/favourites/details"
+@using Microsoft.EntityFrameworkCore
+@using BestRecipes.Domain
+@inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>Favourite</h2>
+    <hr />
+    @if (favourite is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">UserId</dt>
+            <dd class="col-sm-10">@favourite.UserId</dd>
+            <dt class="col-sm-2">RecipeId</dt>
+            <dd class="col-sm-10">@favourite.RecipeId</dd>
+            <dt class="col-sm-2">CategoryId</dt>
+            <dd class="col-sm-10">@favourite.CategoryId</dd>
+            <dt class="col-sm-2">Date</dt>
+            <dd class="col-sm-10">@favourite.Date</dd>
+            <dt class="col-sm-2">DateCreated</dt>
+            <dd class="col-sm-10">@favourite.DateCreated</dd>
+            <dt class="col-sm-2">DateUpdated</dt>
+            <dd class="col-sm-10">@favourite.DateUpdated</dd>
+            <dt class="col-sm-2">CreatedBy</dt>
+            <dd class="col-sm-10">@favourite.CreatedBy</dd>
+            <dt class="col-sm-2">UpdatedBy</dt>
+            <dd class="col-sm-10">@favourite.UpdatedBy</dd>
+        </dl>
+        <div>
+            <a href="@($"/favourites/edit?id={favourite.Id}")">Edit</a> |
+            <a href="@($"/favourites")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Favourite? favourite;
+
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        favourite = await context.Favourite.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (favourite is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}
