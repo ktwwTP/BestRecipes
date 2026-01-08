@@ -1,12 +1,21 @@
-﻿using BestRecipes.Configurations.Entities;
-using BestRecipes.Data;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using BestRecipes.Domain;
+using BestRecipes.Configurations.Entities;
 
 namespace BestRecipes.Data
 {
-    public class BestRecipesContext(DbContextOptions<BestRecipesContext> options) : IdentityDbContext<BestRecipesUser>(options)
+    public class BestRecipesContext : IdentityDbContext<ApplicationUser>
     {
+        public BestRecipesContext(DbContextOptions<BestRecipesContext> options)
+           : base(options)
+        {
+        }
+
         public DbSet<BestRecipes.Domain.Category> Category { get; set; } = default!;
         public DbSet<BestRecipes.Domain.Challenge> Challenge { get; set; } = default!;
         public DbSet<BestRecipes.Domain.Comment> Comment { get; set; } = default!;
@@ -16,7 +25,7 @@ namespace BestRecipes.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder); // Identity needs this
+            base.OnModelCreating(builder);
 
             builder.ApplyConfiguration(new CategorySeed());
             builder.ApplyConfiguration(new ChallengeSeed());
