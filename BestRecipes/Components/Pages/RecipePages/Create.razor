@@ -19,7 +19,12 @@
                 <label for="title" class="form-label">Title:</label> 
                 <InputText id="title" @bind-Value="Recipe.Title" class="form-control" /> 
                 <ValidationMessage For="() => Recipe.Title" class="text-danger" /> 
-            </div>        
+            </div> 
+            <div class="mb-3">
+                <label for="title" class="form-label">Description</label>
+                <InputText id="title" @bind-Value="Recipe.Description" class="form-control" />
+                <ValidationMessage For="() => Recipe.Description" class="text-danger" />
+            </div>
             <div class="mb-3">
                 <label for="instructions" class="form-label">Instructions:</label> 
                 <InputText id="instructions" @bind-Value="Recipe.Instructions" class="form-control" /> 

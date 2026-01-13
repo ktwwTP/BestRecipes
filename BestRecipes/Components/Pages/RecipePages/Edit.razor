@@ -33,6 +33,11 @@ else
                     <ValidationMessage For="() => Recipe.Instructions" class="text-danger" />
                 </div>
                 <div class="mb-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <InputText id="description" @bind-Value="Recipe.Description" class="form-control" />
+					<ValidationMessage For="() => Recipe.Description" class="text-danger" />
+				</div>
+                <div class="mb-3">
                     <label for="preparationtime" class="form-label">PreparationTime:</label>
                     <InputNumber id="preparationtime" @bind-Value="Recipe.PreparationTime" class="form-control" />
                     <ValidationMessage For="() => Recipe.PreparationTime" class="text-danger" />
