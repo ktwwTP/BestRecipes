@@ -16,56 +16,172 @@
 @inject IdentityRedirectManager RedirectManager
 @inject RoleManager<IdentityRole> RoleManager
 
-<PageTitle>Register</PageTitle>
+<PageTitle>Join BestRecipes</PageTitle>
 
-<h1>Register</h1>
+<div class="fd-auth-container">
+    <div class="fd-auth-card">
+        <h2 class="fd-auth-title">SIGN UP</h2>
 
-<div class="row">
-    <div class="col-md-4">
         <StatusMessage Message="@Message" />
+
         <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
             <DataAnnotationsValidator />
-            <h2>Create a new account.</h2>
-            <hr />
-            <ValidationSummary class="text-danger" role="alert" />
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+            <ValidationSummary class="text-danger mb-3" role="alert" style="font-size: 0.8rem; font-weight: bold; list-style: none; padding: 0;" />
+
+            <div class="row g-2">
+                <div class="col-md-6 fd-form-group">
+                    <label for="firstName">First Name</label>
+                    <InputText @bind-Value="Input.FirstName" id="firstName" class="form-control fd-input" autocomplete="firstname" aria-required="true" placeholder="Bill" />
+                    <ValidationMessage For="() => Input.FirstName" class="text-danger small fw-bold" />
+                </div>
+                <div class="col-md-6 fd-form-group">
+                    <label for="lastName">Last Name</label>
+                    <InputText @bind-Value="Input.LastName" id="lastName" class="form-control fd-input" autocomplete="lastname" aria-required="true" placeholder="Gates" />
+                    <ValidationMessage For="() => Input.LastName" class="text-danger small fw-bold" />
+                </div>
+            </div>
+
+            <div class="fd-form-group">
                 <label for="email">Email</label>
-                <ValidationMessage For="() => Input.Email" class="text-danger" />
+                <InputText @bind-Value="Input.Email" id="email" class="form-control fd-input" autocomplete="username" aria-required="true" placeholder="your@email.com" />
+                <ValidationMessage For="() => Input.Email" class="text-danger small fw-bold" />
             </div>
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.FirstName" class="form-control"
-                           autocomplete="firstname" aria-required="true" placeholder="Bill" />
-                <label for="email">First Name</label>
-                <ValidationMessage For="() => Input.FirstName" class="text-danger" />
-            </div>
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.LastName" class="form-control"
-                           autocomplete="lastname" aria-required="true" placeholder="Gates" />
-                <label for="email">Last Name</label>
-                <ValidationMessage For="() => Input.LastName" class="text-danger" />
-            </div>
-            <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+
+            <div class="fd-form-group">
                 <label for="password">Password</label>
-                <ValidationMessage For="() => Input.Password" class="text-danger" />
+                <InputText type="password" @bind-Value="Input.Password" id="password" class="form-control fd-input" autocomplete="new-password" aria-required="true" placeholder="Create Password" />
+                <ValidationMessage For="() => Input.Password" class="text-danger small fw-bold" />
             </div>
-            <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+
+            <div class="fd-form-group">
                 <label for="confirm-password">Confirm Password</label>
-                <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
+                <InputText type="password" @bind-Value="Input.ConfirmPassword" id="confirm-password" class="form-control fd-input" autocomplete="new-password" aria-required="true" placeholder="Repeat Password" />
+                <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger small fw-bold" />
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+
+            <button type="submit" class="btn fd-btn-signup">REGISTER</button>
+
+            <div class="fd-divider">
+                <span>OR REGISTER WITH</span>
+            </div>
+
+            <div class="fd-external-picker">
+                <ExternalLoginPicker />
+            </div>
+
+            <div class="mt-4 fd-login-prompt">
+                Already have an account?
+                <a href="Account/Login" class="fd-link-blue">Log In</a>
+            </div>
         </EditForm>
     </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            <ExternalLoginPicker />
-        </section>
-    </div>
 </div>
+
+<style>
+    .fd-auth-container {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f9f9f9;
+        padding: 40px 20px;
+    }
+
+    .fd-auth-card {
+        max-width: 500px;
+        width: 100%;
+        background: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        text-align: center;
+    }
+
+    .fd-auth-title {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 2rem;
+        font-weight: 900;
+        margin-bottom: 30px;
+        letter-spacing: -1px;
+    }
+
+    .fd-form-group {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+        .fd-form-group label {
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+    .fd-input {
+        background-color: #F2F2F2 !important;
+        border: none !important;
+        border-radius: 4px !important;
+        height: 50px;
+        font-weight: 600;
+        padding: 10px 15px;
+    }
+
+    .fd-btn-signup {
+        background-color: #F5EB3B !important;
+        color: #222 !important;
+        border: none !important;
+        width: 100%;
+        height: 50px;
+        font-weight: 900;
+        letter-spacing: 1px;
+        border-radius: 4px !important;
+        margin-top: 10px;
+    }
+
+        .fd-btn-signup:hover {
+            background-color: #222 !important;
+            color: white !important;
+        }
+
+    .fd-divider {
+        position: relative;
+        text-align: center;
+        margin: 30px 0;
+    }
+
+        .fd-divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: #eee;
+        }
+
+        .fd-divider span {
+            position: relative;
+            background: white;
+            padding: 0 15px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: #757575;
+        }
+
+    .fd-link-blue {
+        color: #0066cc;
+        text-decoration: none;
+        font-weight: 800;
+        font-size: 0.85rem;
+    }
+
+    .fd-login-prompt {
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+</style>
 
 @code {
     private IEnumerable<IdentityError>? identityErrors;
@@ -85,8 +201,10 @@
         await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
         var emailStore = GetEmailStore();
         await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
         user.FirstName = Input.FirstName;
         user.LastName = Input.LastName;
+
         var result = await UserManager.CreateAsync(user, Input.Password);
 
         if (!result.Succeeded)
@@ -95,22 +213,20 @@
             return;
         }
 
-        //create the user role if it doesn't exist
         if (!await RoleManager.RoleExistsAsync("User"))
         {
             await RoleManager.CreateAsync(new IdentityRole("User"));
         }
-        //add the user to the user role
+
         await UserManager.AddToRoleAsync(user, "User");
-        //add the user id as claim when user registers
-        await UserManager.AddClaimAsync(user, new System.Security.Claims.Claim("userId",
-        user.Id));
+        await UserManager.AddClaimAsync(user, new System.Security.Claims.Claim("userId", user.Id));
 
         Logger.LogInformation("User created a new account with password.");
 
         var userId = await UserManager.GetUserIdAsync(user);
         var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
         var callbackUrl = NavigationManager.GetUriWithQueryParameters(
             NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
             new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
@@ -136,8 +252,7 @@
         }
         catch
         {
-            throw new InvalidOperationException($"Can't create an instance of '{nameof(BestRecipesUser)}'. " +
-                $"Ensure that '{nameof(BestRecipesUser)}' is not an abstract class and has a parameterless constructor.");
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(BestRecipesUser)}'.");
         }
     }
 
@@ -168,11 +283,9 @@
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
         public string Password { get; set; } = "";
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = "";
     }

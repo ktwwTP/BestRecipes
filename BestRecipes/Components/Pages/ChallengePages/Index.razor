@@ -5,38 +5,164 @@
 @using BestRecipes.Data
 @implements IAsyncDisposable
 @inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
+@rendermode InteractiveServer
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Cooking Challenges</PageTitle>
 
-<h1>Index</h1>
+@* --- Food.com Style Header --- *@
+<div class="challenge-header">
+    <div class="container text-center">
+        <h1 class="display-4 fw-black">COOKING CHALLENGES</h1>
+        <p class="lead text-uppercase tracking-widest">Show off your skills and win community badges</p>
+    </div>
+</div>
 
-<p>
-    <a href="challenges/create">Create New</a>
-</p>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        @* Search functionality added to match your Recipes page *@
+        <div class="search-box">
+            <i class="bi bi-search"></i>
+            <input type="search" @bind="searchText" @bind:event="oninput"
+                   placeholder="Find a challenge..." class="form-control shadow-sm" />
+        </div>
+        <a href="challenges/create" class="btn btn-challenge-action">
+            <i class="bi bi-plus-lg"></i> START A CHALLENGE
+        </a>
+    </div>
 
-<QuickGrid Class="table" Items="context.Challenge">
-    <PropertyColumn Property="challenge => challenge.Name" />
-    <PropertyColumn Property="challenge => challenge.Details" />
-    <PropertyColumn Property="challenge => challenge.StartDate" />
-    <PropertyColumn Property="challenge => challenge.EndDate" />
-    <PropertyColumn Property="challenge => challenge.DateCreated" />
-    <PropertyColumn Property="challenge => challenge.DateUpdated" />
-    <PropertyColumn Property="challenge => challenge.CreatedBy" />
-    <PropertyColumn Property="challenge => challenge.UpdatedBy" />
+    <div class="card shadow-sm border-0">
+        <QuickGrid Class="table challenge-table" Items="FilteredChallenges">
+            @* Visual Status Column *@
+            <TemplateColumn Title="Status">
+                @{
+                    var status = GetStatus(context.EndDate);
+                    <span class="badge @(status == "Active" ? "bg-success" : "bg-secondary")">
+                        @status.ToUpper()
+                    </span>
+                }
+            </TemplateColumn>
 
-    <TemplateColumn Context="challenge">
-        <a href="@($"challenges/edit?id={challenge.Id}")">Edit</a> |
-        <a href="@($"challenges/details?id={challenge.Id}")">Details</a> |
-        <a href="@($"challenges/delete?id={challenge.Id}")">Delete</a>
-    </TemplateColumn>
-</QuickGrid>
+            <PropertyColumn Property="challenge => challenge.Name" Sortable="true" Title="Challenge Name" Class="fw-bold text-dark" />
+
+            <TemplateColumn Title="Timeline">
+                <div class="small">
+                    <div><i class="bi bi-calendar-check text-muted"></i> @context.StartDate.ToShortDateString()</div>
+                    <div><i class="bi bi-calendar-x text-muted"></i> @context.EndDate.ToShortDateString()</div>
+                </div>
+            </TemplateColumn>
+
+            @* Truncated Details *@
+            <TemplateColumn Title="Details">
+                <div class="text-truncate" style="max-width: 250px;">
+                    @context.Details
+                </div>
+            </TemplateColumn>
+
+            <PropertyColumn Property="challenge => challenge.CreatedBy" Title="Organizer" />
+
+            <TemplateColumn Context="challenge" Title="Actions">
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-outline-dark" href="@($"challenges/details?id={challenge.Id}")">JOIN / VIEW</a>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown"></button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="@($"challenges/edit?id={challenge.Id}")">Edit Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="@($"challenges/delete?id={challenge.Id}")">Delete</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </TemplateColumn>
+        </QuickGrid>
+    </div>
+</div>
+
+<style>
+    .fw-black {
+        font-weight: 900;
+        letter-spacing: -1px;
+        color: #222;
+    }
+
+    .tracking-widest {
+        letter-spacing: 3px;
+        font-size: 0.75rem;
+        color: #757575;
+    }
+
+    .challenge-header {
+        background-color: #f9f9f9;
+        padding: 60px 0;
+        border-bottom: 2px solid #eee;
+        margin-bottom: 2rem;
+    }
+
+    .search-box {
+        position: relative;
+        width: 300px;
+    }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 10px;
+            color: #aaa;
+        }
+
+        .search-box input {
+            padding-left: 35px;
+            border-radius: 20px;
+        }
+
+    .btn-challenge-action {
+        background-color: #f5eb3b; /* Food.com Yellow */
+        color: #222;
+        font-weight: 800;
+        border: 2px solid #222;
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+
+        .btn-challenge-action:hover {
+            background-color: #222;
+            color: #f5eb3b;
+        }
+
+    .challenge-table {
+        vertical-align: middle;
+    }
+
+        .challenge-table thead {
+            background: #222;
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+        }
+
+    .badge {
+        padding: 8px 12px;
+        font-weight: 700;
+        border-radius: 4px;
+    }
+</style>
 
 @code {
     private BestRecipesContext context = default!;
+    private string searchText = "";
+
+    // Filtering logic
+    private IQueryable<Challenge> FilteredChallenges => context.Challenge
+        .Where(c => string.IsNullOrEmpty(searchText) || c.Name.Contains(searchText))
+        .OrderByDescending(c => c.EndDate);
 
     protected override void OnInitialized()
     {
         context = DbFactory.CreateDbContext();
+    }
+
+    private string GetStatus(DateTime endDate)
+    {
+        return endDate >= DateTime.Now ? "Active" : "Expired";
     }
 
     public async ValueTask DisposeAsync() => await context.DisposeAsync();

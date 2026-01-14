@@ -1,24 +1,26 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Authorization
 
-<PageTitle>Home - Recipe Sharing Platform</PageTitle>
+<PageTitle>Home - BestRecipes</PageTitle>
 
+@* --- Food.com Style Hero Section --- *@
 <div class="home-hero">
     <div class="hero-content">
-        <h1 class="hero-title">Welcome to BestRecipes Platform</h1>
-        <p class="hero-subtitle">Discover, Share, and Create Amazing Recipes</p>
-        
+        <div class="fd-label">EST. 2024</div>
+        <h1 class="hero-title">WELCOME TO BESTRECIPES</h1>
+        <p class="hero-subtitle">Discover, Share, and Create Amazing Recipes with our community.</p>
+
         <AuthorizeView>
             <Authorized>
                 <div class="hero-buttons">
-                    <a href="/recipes" class="btn btn-primary btn-lg">Browse Recipes</a>
-                    <a href="/recipes/create" class="btn btn-outline-primary btn-lg">Share Your Recipe</a>
+                    <a href="/recipes" class="btn fd-btn-yellow">BROWSE POPULAR RECIPES</a>
+                    <a href="/recipes/create" class="btn fd-btn-outline-white">SHARE A RECIPE</a>
                 </div>
             </Authorized>
             <NotAuthorized>
                 <div class="hero-buttons">
-                    <a href="/Account/Register" class="btn btn-primary btn-lg">Get Started</a>
-                    <a href="/Account/Login" class="btn btn-primary btn-lg">Sign In</a>
+                    <a href="/Account/Register" class="btn fd-btn-yellow">JOIN THE COMMUNITY</a>
+                    <a href="/Account/Login" class="btn fd-btn-outline-white">SIGN IN</a>
                 </div>
             </NotAuthorized>
         </AuthorizeView>
@@ -27,34 +29,26 @@
 
 <div class="features-section">
     <div class="container">
-        <h2 class="text-center mb-5">Why Choose Our Platform?</h2>
+        <h2 class="fd-section-title">WHY CHOOSE OUR PLATFORM?</h2>
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <span class="bi bi-book"></span>
-                    </div>
-                    <h3>Rich Recipe Collection</h3>
+                    <div class="feature-icon"><span class="bi bi-book"></span></div>
+                    <h3>RICH COLLECTION</h3>
                     <p>Access thousands of recipes from breakfast to dessert, all in one place.</p>
                 </div>
             </div>
-            
             <div class="col-md-4">
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <span class="bi bi-people"></span>
-                    </div>
-                    <h3>Community Driven</h3>
+                    <div class="feature-icon"><span class="bi bi-people"></span></div>
+                    <h3>COMMUNITY DRIVEN</h3>
                     <p>Share your culinary creations and learn from fellow food enthusiasts.</p>
                 </div>
             </div>
-            
             <div class="col-md-4">
                 <div class="feature-card">
-                    <div class="feature-icon">
-                        <span class="bi bi-trophy"></span>
-                    </div>
-                    <h3>Cooking Challenges</h3>
+                    <div class="feature-icon"><span class="bi bi-trophy"></span></div>
+                    <h3>COOKING CHALLENGES</h3>
                     <p>Participate in exciting cooking challenges and showcase your skills.</p>
                 </div>
             </div>
@@ -65,31 +59,31 @@
 <AuthorizeView>
     <Authorized>
         <div class="quick-links-section">
-            <div class="container">
-                <h2 class="text-center mb-4">Quick Access</h2>
+            <div class="container text-center">
+                <h2 class="fd-section-title">QUICK ACCESS</h2>
                 <div class="row g-3">
                     <div class="col-md-3">
                         <a href="/recipes" class="quick-link-card">
                             <span class="bi bi-card-list"></span>
-                            <span>My Recipes</span>
+                            <span>POPULAR RECIPES</span>
                         </a>
                     </div>
                     <div class="col-md-3">
                         <a href="/favourites" class="quick-link-card">
                             <span class="bi bi-heart"></span>
-                            <span>Favourites</span>
+                            <span>FAVOURITES</span>
                         </a>
                     </div>
                     <div class="col-md-3">
                         <a href="/challenges" class="quick-link-card">
                             <span class="bi bi-trophy"></span>
-                            <span>Challenges</span>
+                            <span>CHALLENGES</span>
                         </a>
                     </div>
                     <div class="col-md-3">
                         <a href="/categories" class="quick-link-card">
                             <span class="bi bi-grid"></span>
-                            <span>Categories</span>
+                            <span>CATEGORIES</span>
                         </a>
                     </div>
                 </div>
@@ -98,114 +92,125 @@
     </Authorized>
 </AuthorizeView>
 
- <style>
+<style>
+    :root {
+        --fd-yellow: #F5EB3B;
+        --fd-black: #222222;
+        --fd-grey: #757575;
+    }
+
+    /* --- Hero Section --- */
     .home-hero {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-color: var(--fd-black);
         color: white;
-        padding: 100px 20px;
+        padding: 120px 20px;
         text-align: center;
-        margin-bottom: 60px;
-        border-radius: 0 0 50px 50px;
+        border-radius: 0; /* Food.com uses sharp edges */
+        position: relative;
     }
-    
+
+    .fd-label {
+        font-weight: 900;
+        letter-spacing: 3px;
+        font-size: 0.8rem;
+        color: var(--fd-yellow);
+        margin-bottom: 15px;
+    }
+
     .hero-title {
-        font-size: 3.5rem;
-        font-weight: 700;
+        font-family: 'Arial Black', Gadget, sans-serif;
+        font-size: 4rem;
+        font-weight: 900;
         margin-bottom: 20px;
-        animation: fadeInDown 1s;
+        letter-spacing: -2px;
     }
-    
+
     .hero-subtitle {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         margin-bottom: 40px;
-        opacity: 0.9;
-        animation: fadeInUp 1s;
+        color: #ddd;
     }
-    
+
+    /* --- Buttons --- */
     .hero-buttons {
         display: flex;
         gap: 20px;
         justify-content: center;
-        flex-wrap: wrap;
-        animation: fadeIn 1.5s;
     }
-    
-    .hero-buttons .btn {
+
+    .fd-btn-yellow {
+        background: var(--fd-yellow);
+        color: var(--fd-black);
+        border: none;
         padding: 15px 40px;
-        border-radius: 50px;
-        font-weight: 600;
-        transition: transform 0.3s;
-    }
-    
-    .hero-buttons .btn:hover {
-        transform: translateY(-3px);
+        border-radius: 0; /* Square edges */
+        font-weight: 900;
+        letter-spacing: 1px;
     }
 
-    .hero-buttons .btn-primary {
-        background: #5568d3;
-        border: 2px solid #52B788;
+        .fd-btn-yellow:hover {
+            background: white;
+            color: var(--fd-black);
+        }
+
+    .fd-btn-outline-white {
+        background: transparent;
         color: white;
+        border: 2px solid white;
+        padding: 15px 40px;
+        border-radius: 0;
+        font-weight: 900;
+        letter-spacing: 1px;
     }
 
-   .hero-buttons .btn-primary:hover {
-        background: #52B788;
-        border: 2px solid #52B788;
-        color: white;
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-   }
+        .fd-btn-outline-white:hover {
+            background: white;
+            color: var(--fd-black);
+        }
 
-   .hero-buttons .btn-outline-primary {
-        background: #5568d3;
-        border: 2px solid #52B788;
-        color: white;
-   }
+    /* --- Sections & Cards --- */
+    .fd-section-title {
+        font-weight: 900;
+        text-align: center;
+        margin-bottom: 40px;
+        font-family: 'Arial Black', sans-serif;
+    }
 
-   .hero-buttons .btn-outline-primary:hover {
-        background: #52B788; 
-        border: 2px solid #52B788; 
-        color: white;
-   }
     .features-section {
-        padding: 60px 20px;
-        background: #f8f9fa;
+        padding: 80px 20px;
+        background: white;
     }
-    
+
     .feature-card {
         background: white;
         padding: 40px 30px;
-        border-radius: 15px;
+        border: 2px solid #eee; /* Light border instead of heavy shadow */
         text-align: center;
         height: 100%;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        transition: transform 0.3s, box-shadow 0.3s;
+        transition: border-color 0.3s;
     }
-    
-    .feature-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-    }
-    
+
+        .feature-card:hover {
+            border-color: var(--fd-yellow);
+        }
+
     .feature-icon {
         font-size: 3rem;
-        color: #667eea;
+        color: var(--fd-black);
         margin-bottom: 20px;
     }
-    
+
     .feature-card h3 {
-        font-size: 1.5rem;
+        font-weight: 900;
+        font-size: 1.2rem;
         margin-bottom: 15px;
-        color: #2d3142;
     }
-    
-    .feature-card p {
-        color: #6c757d;
-        line-height: 1.6;
-    }
-    
+
     .quick-links-section {
-        padding: 60px 20px;
+        padding: 80px 20px;
+        background: #fdfdfd;
     }
-    
+
     .quick-link-card {
         display: flex;
         flex-direction: column;
@@ -213,27 +218,20 @@
         justify-content: center;
         padding: 40px 20px;
         background: white;
-        border-radius: 15px;
+        border: 2px solid var(--fd-black);
         text-decoration: none;
-        color: #2d3142;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        transition: all 0.3s;
-        height: 150px;
+        color: var(--fd-black);
+        font-weight: 900;
+        transition: all 0.2s;
     }
-    
-    .quick-link-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        color: #667eea;
-    }
-    
-    .quick-link-card .bi {
-        font-size: 3rem;
-        margin-bottom: 15px;
-    }
-    
-    .quick-link-card span:last-child {
-        font-weight: 600;
-        font-size: 1.1rem;
-    }
+
+        .quick-link-card:hover {
+            background: var(--fd-yellow);
+            transform: translateY(-5px);
+        }
+
+        .quick-link-card .bi {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
 </style>

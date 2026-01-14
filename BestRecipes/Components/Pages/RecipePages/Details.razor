@@ -1,58 +1,323 @@
 ﻿@page "/recipes/details"
+@rendermode InteractiveServer
 @using Microsoft.EntityFrameworkCore
 @using BestRecipes.Domain
 @inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
 @inject NavigationManager NavigationManager
 
-<PageTitle>Details</PageTitle>
+@if (recipe is not null)
+{
+    <PageTitle>@recipe.Title - BestRecipes</PageTitle>
 
-<h1>Details</h1>
+    @* --- HERO SECTION --- *@
+    <div class="recipe-hero">
+        <div class="container">
+            <nav class="fd-breadcrumb">HOME / RECIPES / @recipe.Title.ToUpper()</nav>
+            <h1 class="fd-recipe-title">@recipe.Title.ToUpper()</h1>
 
-<div>
-    <h2>Recipe</h2>
-    <hr />
-    @if (recipe is null)
-    {
-        <p><em>Loading...</em></p>
-    }
-    else {
-        <dl class="row">
-            <dt class="col-sm-2">Title</dt>
-            <dd class="col-sm-10">@recipe.Title</dd>
-            <dt class="col-sm-2">Description</dt>
-            <dd class="col-sm-10">@recipe.Description</dd>
-            <dt class="col-sm-2">Instructions</dt>
-            <dd class="col-sm-10">@recipe.Instructions</dd>
-            <dt class="col-sm-2">PreparationTime</dt>
-            <dd class="col-sm-10">@recipe.PreparationTime</dd>
-            <dt class="col-sm-2">CookingDuration</dt>
-            <dd class="col-sm-10">@recipe.CookingDuration</dd>
-            <dt class="col-sm-2">ServingSize</dt>
-            <dd class="col-sm-10">@recipe.ServingSize</dd>
-            <dt class="col-sm-2">IngredientId</dt>
-            <dd class="col-sm-10">@recipe.IngredientId</dd>
-            <dt class="col-sm-2">UserId</dt>
-            <dd class="col-sm-10">@recipe.UserId</dd>
-            <dt class="col-sm-2">CategoryId</dt>
-            <dd class="col-sm-10">@recipe.CategoryId</dd>
-            <dt class="col-sm-2">DateCreated</dt>
-            <dd class="col-sm-10">@recipe.DateCreated</dd>
-            <dt class="col-sm-2">DateUpdated</dt>
-            <dd class="col-sm-10">@recipe.DateUpdated</dd>
-            <dt class="col-sm-2">CreatedBy</dt>
-            <dd class="col-sm-10">@recipe.CreatedBy</dd>
-            <dt class="col-sm-2">UpdatedBy</dt>
-            <dd class="col-sm-10">@recipe.UpdatedBy</dd>
-        </dl>
-        <div>
-            <a href="@($"/recipes/edit?id={recipe.Id}")">Edit</a> |
-            <a href="@($"/recipes")">Back to List</a>
+            <div class="fd-recipe-meta">
+                <div class="meta-item">
+                    <span class="bi bi-star-fill fd-yellow"></span>
+                    <span class="bi bi-star-fill fd-yellow"></span>
+                    <span class="bi bi-star-fill fd-yellow"></span>
+                    <span class="bi bi-star-fill fd-yellow"></span>
+                    <span class="bi bi-star fd-yellow"></span>
+                    <span class="ms-2"><strong>4.0</strong> (24 REVIEWS)</span>
+                </div>
+                <div class="meta-item">
+                    <i class="bi bi-person-circle"></i> BY <strong>@recipe.CreatedBy.ToUpper()</strong>
+                </div>
+            </div>
+
+            <div class="fd-action-bar">
+                <button class="fd-btn-outline"><i class="bi bi-bookmark"></i> SAVE</button>
+                <button class="fd-btn-outline"><i class="bi bi-printer"></i> PRINT</button>
+                <a href="@($"/recipes/edit?id={recipe.Id}")" class="fd-btn-outline text-decoration-none"><i class="bi bi-pencil"></i> EDIT</a>
+            </div>
         </div>
+    </div>
+
+    @* --- MAIN CONTENT --- *@
+    <div class="container mt-5">
+        <div class="row">
+            @* Left Column: Info and Ingredients *@
+            <div class="col-lg-4">
+                <div class="fd-sidebar-box">
+                    <div class="fd-time-grid">
+                        <div class="time-box">
+                            <span class="label">PREP</span>
+                            <span class="value">@DisplayPrepTime MIN</span>
+                        </div>
+                        <div class="time-box">
+                            <span class="label">COOK</span>
+                            <span class="value">@DisplayCookTime MIN</span>
+                        </div>
+                    </div>
+
+                    <div class="fd-servings-box">
+                        <span class="label">SERVINGS</span>
+                        <div class="servings-selector">
+                            @* type="button" prevents form submission *@
+                            <button type="button" @onclick="() => AdjustServings(-1)">-</button>
+                            <span class="value">@currentServings</span>
+                            <button type="button" @onclick="() => AdjustServings(1)">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fd-ingredients-section">
+                    <h3 class="fd-section-header">INGREDIENTS</h3>
+                    <ul class="fd-ingredient-list">
+                        <li>
+                            <i class="bi bi-circle"></i>
+                            @* Scaling the text based on the multiplier *@
+                            <strong>@(ScalingFactor.ToString("0.##"))x</strong> @ingredientName
+                        </li>
+                        <li><i class="bi bi-circle"></i> @recipe.Description</li>
+                    </ul>
+                </div>
+            </div>
+
+            @* Right Column: Instructions *@
+            <div class="col-lg-8">
+                <h3 class="fd-section-header">DIRECTIONS</h3>
+                <div class="fd-instructions">
+                    @{
+                        var steps = recipe.Instructions.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                        int stepNum = 1;
+                    }
+                    @foreach (var step in steps)
+                    {
+                        <div class="fd-step">
+                            <span class="step-number">@stepNum</span>
+                            <p class="step-text">@step</p>
+                        </div>
+                        stepNum++;
+                    }
+                </div>
+
+                <div class="fd-footer-meta mt-5">
+                    <p><strong>RECIPE ID:</strong> @recipe.Id</p>
+                    <p><strong>BASE SERVINGS:</strong> @baseServings</p>
+                    <p><strong>PUBLISHED:</strong> @recipe.DateCreated.ToShortDateString()</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container mt-5 text-center">
+        <div class="spinner-border text-warning" role="status"></div>
+        <p class="mt-2">Loading Deliciousness...</p>
+    </div>
+}
+
+<style>
+    :root {
+        --fd-yellow: #F5EB3B;
+        --fd-black: #222222;
+        --fd-grey: #757575;
     }
-</div>
+
+    .recipe-hero {
+        background-color: white;
+        padding: 40px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .fd-breadcrumb {
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        color: var(--fd-grey);
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+
+    .fd-recipe-title {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 3.5rem;
+        font-weight: 900;
+        letter-spacing: -2px;
+        color: var(--fd-black);
+        margin-bottom: 20px;
+    }
+
+    .fd-recipe-meta {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 25px;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+
+    .fd-yellow {
+        color: var(--fd-yellow);
+        text-shadow: 1px 1px 1px #ccc;
+    }
+
+    .fd-action-bar {
+        display: flex;
+        gap: 10px;
+    }
+
+    .fd-btn-outline {
+        background: white;
+        border: 2px solid var(--fd-black);
+        color: var(--fd-black);
+        padding: 8px 20px;
+        font-weight: 900;
+        font-size: 0.8rem;
+    }
+
+        .fd-btn-outline:hover {
+            background: var(--fd-black);
+            color: white;
+        }
+
+    .fd-section-header {
+        font-family: 'Arial Black', sans-serif;
+        font-weight: 900;
+        border-bottom: 4px solid var(--fd-black);
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+    }
+
+    .fd-sidebar-box {
+        background: #f9f9f9;
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 4px;
+    }
+
+    .fd-time-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .time-box {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+        .time-box .label, .fd-servings-box .label {
+            font-size: 0.7rem;
+            font-weight: 900;
+            color: var(--fd-grey);
+            letter-spacing: 1px;
+        }
+
+        .time-box .value {
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+
+    .fd-servings-box {
+        text-align: center;
+        border-top: 1px solid #ddd;
+        padding-top: 15px;
+    }
+
+    .servings-selector {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 5px;
+    }
+
+        .servings-selector button {
+            border: 1px solid #ccc;
+            background: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+            .servings-selector button:hover {
+                background: var(--fd-black);
+                color: white;
+            }
+
+        .servings-selector .value {
+            font-weight: 900;
+            font-size: 1.5rem;
+            min-width: 40px;
+        }
+
+    .fd-ingredient-list {
+        list-style: none;
+        padding: 0;
+    }
+
+        .fd-ingredient-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            font-weight: 500;
+            display: flex;
+            gap: 10px;
+        }
+
+            .fd-ingredient-list li i {
+                color: #ccc;
+                font-size: 0.8rem;
+            }
+
+    .fd-instructions {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .fd-step {
+        display: flex;
+        gap: 20px;
+    }
+
+    .step-number {
+        background: var(--fd-black);
+        color: white;
+        min-width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+    }
+
+    .step-text {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: #333;
+        margin: 0;
+    }
+
+    .fd-footer-meta p {
+        font-size: 0.8rem;
+        color: var(--fd-grey);
+        margin-bottom: 5px;
+        font-weight: 700;
+    }
+</style>
 
 @code {
     private Recipe? recipe;
+    private string ingredientName = "Loading...";
+
+    private int currentServings;
+    private int baseServings;
+
+    // These update the UI automatically when currentServings changes
+    private double ScalingFactor => (double)currentServings / (baseServings > 0 ? baseServings : 1);
+    private int DisplayPrepTime => recipe != null ? (int)Math.Round(recipe.PreparationTime * ScalingFactor) : 0;
+    private int DisplayCookTime => recipe != null ? (int)Math.Round(recipe.CookingDuration * ScalingFactor) : 0;
 
     [SupplyParameterFromQuery]
     private int Id { get; set; }
@@ -62,9 +327,28 @@
         using var context = DbFactory.CreateDbContext();
         recipe = await context.Recipe.FirstOrDefaultAsync(m => m.Id == Id);
 
-        if (recipe is null)
+        if (recipe is not null)
+        {
+            baseServings = recipe.ServingSize;
+            currentServings = recipe.ServingSize;
+
+            var ingredient = await context.Ingredient
+                .FirstOrDefaultAsync(i => i.Id == recipe.IngredientId);
+
+            ingredientName = ingredient?.Name ?? "General Ingredients";
+        }
+        else
         {
             NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    private void AdjustServings(int delta)
+    {
+        var nextValue = currentServings + delta;
+        if (nextValue >= 1)
+        {
+            currentServings = nextValue;
         }
     }
 }
