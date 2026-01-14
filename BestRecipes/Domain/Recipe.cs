@@ -4,6 +4,8 @@
     {
         public string Title { get; set; }
         public string Description { get; set; }
+        public string? ImageUrl { get; set; } // Add this line
+        public bool IsTrending { get; set; }  // Add this line for manual control
         public string Instructions { get; set; }
         public int PreparationTime { get; set; }
         public int CookingDuration { get; set; }

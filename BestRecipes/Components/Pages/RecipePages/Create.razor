@@ -1,104 +1,203 @@
 ﻿@page "/recipes/create"
 @using Microsoft.EntityFrameworkCore
 @using BestRecipes.Domain
+@using System.IO
+@using Microsoft.AspNetCore.Hosting
+@using System.Security.Claims
 @inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
 @inject NavigationManager NavigationManager
+@inject IWebHostEnvironment Environment
+@inject AuthenticationStateProvider AuthStateProvider
 
-<PageTitle>Create</PageTitle>
+<PageTitle>Create Recipe</PageTitle>
 
-<h1>Create</h1>
+<div class="container mt-4">
+    <h1 class="fd-section-title text-start">SHARE A RECIPE</h1>
+    <hr style="border: 2px solid var(--fd-black); opacity: 1;" />
 
-<h2>Recipe</h2>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <EditForm method="post" Model="Recipe" OnValidSubmit="AddRecipe" FormName="create" Enhance>
-            <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert"/>
-            <div class="mb-3">
-                <label for="title" class="form-label">Title:</label> 
-                <InputText id="title" @bind-Value="Recipe.Title" class="form-control" /> 
-                <ValidationMessage For="() => Recipe.Title" class="text-danger" /> 
-            </div> 
-            <div class="mb-3">
-                <label for="title" class="form-label">Description</label>
-                <InputText id="title" @bind-Value="Recipe.Description" class="form-control" />
-                <ValidationMessage For="() => Recipe.Description" class="text-danger" />
-            </div>
-            <div class="mb-3">
-                <label for="instructions" class="form-label">Instructions:</label> 
-                <InputText id="instructions" @bind-Value="Recipe.Instructions" class="form-control" /> 
-                <ValidationMessage For="() => Recipe.Instructions" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="preparationtime" class="form-label">PreparationTime:</label> 
-                <InputNumber id="preparationtime" @bind-Value="Recipe.PreparationTime" class="form-control" /> 
-                <ValidationMessage For="() => Recipe.PreparationTime" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="cookingduration" class="form-label">CookingDuration:</label> 
-                <InputNumber id="cookingduration" @bind-Value="Recipe.CookingDuration" class="form-control" /> 
-                <ValidationMessage For="() => Recipe.CookingDuration" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="servingsize" class="form-label">ServingSize:</label> 
-                <InputNumber id="servingsize" @bind-Value="Recipe.ServingSize" class="form-control" /> 
-                <ValidationMessage For="() => Recipe.ServingSize" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="ingredientid" class="form-label">IngredientId:</label> 
-                <InputNumber id="ingredientid" @bind-Value="Recipe.IngredientId" class="form-control" /> 
-                <ValidationMessage For="() => Recipe.IngredientId" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="userid" class="form-label">UserId:</label> 
-                <InputNumber id="userid" @bind-Value="Recipe.UserId" class="form-control" /> 
-                <ValidationMessage For="() => Recipe.UserId" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="categoryid" class="form-label">CategoryId:</label> 
-                <InputNumber id="categoryid" @bind-Value="Recipe.CategoryId" class="form-control" /> 
-                <ValidationMessage For="() => Recipe.CategoryId" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="datecreated" class="form-label">DateCreated:</label> 
-                <InputDate id="datecreated" @bind-Value="Recipe.DateCreated" class="form-control" /> 
-                <ValidationMessage For="() => Recipe.DateCreated" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="dateupdated" class="form-label">DateUpdated:</label> 
-                <InputDate id="dateupdated" @bind-Value="Recipe.DateUpdated" class="form-control" /> 
-                <ValidationMessage For="() => Recipe.DateUpdated" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="createdby" class="form-label">CreatedBy:</label> 
-                <InputText id="createdby" @bind-Value="Recipe.CreatedBy" class="form-control" /> 
-                <ValidationMessage For="() => Recipe.CreatedBy" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="updatedby" class="form-label">UpdatedBy:</label> 
-                <InputText id="updatedby" @bind-Value="Recipe.UpdatedBy" class="form-control" /> 
-                <ValidationMessage For="() => Recipe.UpdatedBy" class="text-danger" /> 
-            </div>        
-            <button type="submit" class="btn btn-primary">Create</button>
-        </EditForm>
+    <div class="row">
+        <div class="col-md-6">
+            @* Note: 'Enhance' is removed to allow standard file streaming *@
+            <EditForm method="post" Model="Recipe" OnValidSubmit="AddRecipe" FormName="create">
+                <DataAnnotationsValidator />
+                <ValidationSummary class="text-danger" role="alert" />
+
+                <div class="mb-3">
+                    <label class="fd-label" style="color:black">RECIPE TITLE</label>
+                    <InputText id="title" @bind-Value="Recipe.Title" class="form-control fd-input" />
+                    <ValidationMessage For="() => Recipe.Title" class="text-danger" />
+                </div>
+
+                @* --- NEW IMAGE UPLOAD SECTION --- *@
+                <div class="mb-4 p-3" style="background: #f8f9fa; border: 2px dashed #ccc;">
+                    <label class="fd-label" style="color:black">UPLOAD PHOTO</label>
+                    <InputFile OnChange="HandleFileSelected" class="form-control" />
+                    <small class="text-muted">Max size: 5MB (jpg, png)</small>
+
+                    @if (!string.IsNullOrEmpty(Recipe.ImageUrl))
+                    {
+                        <div class="mt-2">
+                            <img src="@Recipe.ImageUrl" style="max-height: 150px; border: 2px solid var(--fd-black);" />
+                        </div>
+                    }
+                </div>
+                @* -------------------------------- *@
+
+                <div class="mb-3">
+                    <label class="fd-label" style="color:black">DESCRIPTION</label>
+                    <InputTextArea @bind-Value="Recipe.Description" class="form-control fd-input" rows="3" />
+                    <ValidationMessage For="() => Recipe.Description" class="text-danger" />
+                </div>
+
+                @* Row for numbers *@
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="fd-label" style="color:black">PREP (MINS)</label>
+                        <InputNumber @bind-Value="Recipe.PreparationTime" class="form-control fd-input" />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="fd-label" style="color:black">COOK (MINS)</label>
+                        <InputNumber @bind-Value="Recipe.CookingDuration" class="form-control fd-input" />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="fd-label" style="color:black">SERVES</label>
+                        <InputNumber @bind-Value="Recipe.ServingSize" class="form-control fd-input" />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="fd-label" style="color:black">COOKING INSTRUCTIONS</label>
+                    <InputTextArea id="instructions"
+                                   @bind-Value="Recipe.Instructions"
+                                   class="form-control fd-input"
+                                   rows="8"
+                                   placeholder="Step 1: Preheat oven...&#10;Step 2: Chop the onions..." />
+                    <ValidationMessage For="() => Recipe.Instructions" class="text-danger" />
+                    <small class="text-muted">Tip: Describe each step clearly on a new line.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="fd-label" style="color:black">CATEGORY</label>
+                    <InputSelect @bind-Value="Recipe.CategoryId" class="form-control fd-input">
+                        <option value="">-- Select a Category --</option>
+                        @if (categories != null)
+                        {
+                            @foreach (var cat in categories)
+                            {
+                                <option value="@cat.Id">@cat.Name.ToUpper()</option>
+                            }
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="() => Recipe.CategoryId" class="text-danger" />
+                </div>
+
+                @* Hidden/System fields (You can automate these later) *@
+                <div class="d-none">
+                    <InputNumber @bind-Value="Recipe.IngredientId" />
+                    <InputNumber @bind-Value="Recipe.UserId" />
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn fd-btn-yellow w-100">CREATE RECIPE</button>
+                </div>
+            </EditForm>
+        </div>
     </div>
 </div>
 
-<div>
-    <a href="/recipes">Back to List</a>
-</div>
+<style>
+    .fd-input {
+        border: 2px solid var(--fd-black);
+        border-radius: 0;
+    }
+
+        .fd-input:focus {
+            box-shadow: 4px 4px 0px var(--fd-yellow);
+            border-color: var(--fd-black);
+        }
+
+    .fd-input {
+        border: 2px solid var(--fd-black);
+        border-radius: 0;
+        padding: 12px;
+    }
+
+    /* Makes the text area feel like a high-end journal */
+    textarea.fd-input {
+        line-height: 1.6;
+        background-color: #fafafa;
+    }
+
+    .fd-input:focus {
+        box-shadow: 6px 6px 0px var(--fd-yellow);
+        border-color: var(--fd-black);
+        outline: none;
+        background-color: #fff;
+    }
+
+</style>
 
 @code {
     [SupplyParameterFromForm]
     private Recipe Recipe { get; set; } = new();
 
-    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private List<Category>? categories; // List to hold your categories
+    private IBrowserFile? selectedFile;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Fetch the categories from the database for the dropdown
+        using var context = DbFactory.CreateDbContext();
+        categories = await context.Category.OrderBy(c => c.Name).ToListAsync();
+
+        // Default values for system fields
+        Recipe.DateCreated = DateTime.Now;
+        Recipe.CreatedBy = "SystemUser"; // Replace with logged-in user logic later
+    }
+
+    private void HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+    }
+
     private async Task AddRecipe()
     {
+        // 1. Get the authentication state (Is someone logged in?)
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            // 2. Get the unique ID (Subject/NameIdentifier) of the user
+            var userIdString = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // 3. Convert that string ID to an int to match your Recipe model
+            if (int.TryParse(userIdString, out var userId))
+            {
+                Recipe.UserId = userId;
+            }
+        }
+
+        if (selectedFile != null)
+        {
+            var uploadDir = Path.Combine(Environment.WebRootPath, "uploads");
+            if (!Directory.Exists(uploadDir)) Directory.CreateDirectory(uploadDir);
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(selectedFile.Name)}";
+            var path = Path.Combine(uploadDir, fileName);
+
+            using var stream = selectedFile.OpenReadStream(5120000);
+            using var fileStream = new FileStream(path, FileMode.Create);
+            await stream.CopyToAsync(fileStream);
+
+            Recipe.ImageUrl = $"/uploads/{fileName}";
+        }
+
         using var context = DbFactory.CreateDbContext();
+        Recipe.DateCreated = DateTime.Now;
+        Recipe.CreatedBy = user.Identity?.Name ?? "Unknown";
         context.Recipe.Add(Recipe);
         await context.SaveChangesAsync();
-        NavigationManager.NavigateTo("/recipes");
+        NavigationManager.NavigateTo("/recipes/trending");
     }
 }
