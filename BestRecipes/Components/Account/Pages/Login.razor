@@ -31,8 +31,21 @@
             <div class="fd-form-group">
                 <label for="password">Password</label>
                 <div class="position-relative">
-                    <InputText type="password" @bind-Value="Input.Password" id="password" class="form-control fd-input" autocomplete="current-password" aria-required="true" placeholder="Password" />
-                    <span class="fd-password-toggle">SHOW</span>
+                    @* 1. ID 'passwordField' is required for the inline script to find this input *@
+                    <InputText type="password"
+                               @bind-Value="Input.Password"
+                               id="passwordField"
+                               class="form-control fd-input"
+                               autocomplete="current-password"
+                               aria-required="true"
+                               placeholder="Password" />
+
+                    @* 2. INLINE JAVASCRIPT: This logic runs immediately when clicked, no external script required *@
+                    <span class="fd-password-toggle"
+                          onclick="var p=document.getElementById('passwordField'); if(p.type==='password'){p.type='text';this.innerText='HIDE'}else{p.type='password';this.innerText='SHOW'}"
+                          style="cursor: pointer;">
+                        SHOW
+                    </span>
                 </div>
                 <ValidationMessage For="() => Input.Password" class="text-danger small fw-bold" />
             </div>
@@ -51,7 +64,6 @@
                 <span>OR CONTINUE WITH</span>
             </div>
 
-            @* Integrating your ExternalLoginPicker but with Food.com styling applied via CSS *@
             <div class="fd-external-picker">
                 <ExternalLoginPicker />
             </div>
@@ -69,6 +81,7 @@
 </div>
 
 <style>
+    /* ... Keeping all your styling exactly the same ... */
     .fd-auth-container {
         min-height: 80vh;
         display: flex;
@@ -127,6 +140,8 @@
         font-weight: 900;
         cursor: pointer;
         color: #222;
+        user-select: none;
+        z-index: 10;
     }
 
     .fd-btn-login {
@@ -198,7 +213,7 @@
     private string? errorMessage;
 
     [CascadingParameter]
-    private HttpContext HttpContext { get; set; } = default!;
+    private HttpContext? HttpContext { get; set; }
 
     [SupplyParameterFromForm]
     private InputModel Input { get; set; } = new();
@@ -208,9 +223,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (HttpMethods.IsGet(HttpContext.Request.Method))
+        // Added null check to prevent any unhandled errors
+        if (HttpContext != null)
         {
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            if (HttpMethods.IsGet(HttpContext.Request.Method))
+            {
+                await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            }
         }
     }
 

@@ -1,47 +1,80 @@
 ﻿@page "/Account/ConfirmEmail"
-
-@using System.Text
 @using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.WebUtilities
 @using BestRecipes.Data
-
 @inject UserManager<BestRecipesUser> UserManager
 @inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Confirm email</PageTitle>
+<PageTitle>Confirm Email | BestRecipes</PageTitle>
 
-<h1>Confirm email</h1>
-<StatusMessage Message="@statusMessage" />
+<div class="fd-auth-container">
+    <div class="fd-auth-card">
+        <div class="fd-icon-circle">
+            <i class="bi bi-envelope-check"></i>
+        </div>
+        <h2 class="fd-auth-title">CONFIRM EMAIL</h2>
+
+        <StatusMessage Message="@statusMessage" />
+
+        @if (statusMessage?.StartsWith("Error") == false)
+        {
+            <p class="fd-confirm-text">Your email has been successfully verified! You can now access all community features and challenges.</p>
+            <a href="Account/Login" class="btn fd-btn-login">LOG IN TO YOUR ACCOUNT</a>
+        }
+        else
+        {
+            <p class="fd-confirm-text text-danger">There was an issue verifying your email. Please try resending the link.</p>
+            <a href="Account/ResendEmailConfirmation" class="fd-link-blue">Resend Confirmation Link</a>
+        }
+    </div>
+</div>
+
+<style>
+    .fd-icon-circle {
+        width: 80px;
+        height: 80px;
+        background-color: #F5EB3B;
+        color: #222;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        margin: 0 auto 20px;
+    }
+
+    .fd-confirm-text {
+        font-weight: 600;
+        line-height: 1.6;
+        margin-bottom: 30px;
+        color: #555;
+    }
+</style>
 
 @code {
     private string? statusMessage;
 
-    [CascadingParameter]
-    private HttpContext HttpContext { get; set; } = default!;
+    [SupplyParameterFromQuery]
+    private string? userId { get; set; }
 
     [SupplyParameterFromQuery]
-    private string? UserId { get; set; }
-
-    [SupplyParameterFromQuery]
-    private string? Code { get; set; }
+    private string? code { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        if (UserId is null || Code is null)
+        if (userId is null || code is null)
         {
             RedirectManager.RedirectTo("");
         }
 
-        var user = await UserManager.FindByIdAsync(UserId);
+        var user = await UserManager.FindByIdAsync(userId);
         if (user is null)
         {
-            HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-            statusMessage = $"Error loading user with ID {UserId}";
+            statusMessage = $"Error: Unable to find user with ID '{userId}'.";
         }
         else
         {
-            var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
-            var result = await UserManager.ConfirmEmailAsync(user, code);
+            var codeBytes = System.Text.Encoding.UTF8.GetString(Microsoft.AspNetCore.WebUtilities.WebEncoders.Base64UrlDecode(code));
+            var result = await UserManager.ConfirmEmailAsync(user, codeBytes);
             statusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
         }
     }

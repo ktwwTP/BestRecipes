@@ -24,9 +24,6 @@ namespace BestRecipes.Data
             builder.ApplyConfiguration(new FavouriteSeed());
             builder.ApplyConfiguration(new IngredientSeed());
             builder.ApplyConfiguration(new RecipeSeed());
-            builder.ApplyConfiguration(new RoleSeed());
-            builder.ApplyConfiguration(new UserRoleSeed());
-            builder.ApplyConfiguration(new UserSeed());
         }
     }
 }

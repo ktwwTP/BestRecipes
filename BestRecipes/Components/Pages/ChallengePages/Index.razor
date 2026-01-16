@@ -1,6 +1,7 @@
 ﻿@page "/challenges"
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.AspNetCore.Authorization
 @using BestRecipes.Domain
 @using BestRecipes.Data
 @implements IAsyncDisposable
@@ -19,7 +20,6 @@
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        @* Search functionality added to match your Recipes page *@
         <div class="search-box">
             <i class="bi bi-search"></i>
             <input type="search" @bind="searchText" @bind:event="oninput"
@@ -30,9 +30,8 @@
         </a>
     </div>
 
-    <div class="card shadow-sm border-0">
+    <div class="card shadow-sm border-0 fd-grid-container">
         <QuickGrid Class="table challenge-table" Items="FilteredChallenges">
-            @* Visual Status Column *@
             <TemplateColumn Title="Status">
                 @{
                     var status = GetStatus(context.EndDate);
@@ -42,7 +41,7 @@
                 }
             </TemplateColumn>
 
-            <PropertyColumn Property="challenge => challenge.Name" Sortable="true" Title="Challenge Name" Class="fw-bold text-dark" />
+            <PropertyColumn Property="challenge => challenge.Name" Sortable="true" Title="Challenge Name" Class="fd-column-name" />
 
             <TemplateColumn Title="Timeline">
                 <div class="small">
@@ -51,7 +50,6 @@
                 </div>
             </TemplateColumn>
 
-            @* Truncated Details *@
             <TemplateColumn Title="Details">
                 <div class="text-truncate" style="max-width: 250px;">
                     @context.Details
@@ -61,15 +59,36 @@
             <PropertyColumn Property="challenge => challenge.CreatedBy" Title="Organizer" />
 
             <TemplateColumn Context="challenge" Title="Actions">
-                <div class="btn-group">
-                    <a class="btn btn-sm btn-outline-dark" href="@($"challenges/details?id={challenge.Id}")">JOIN / VIEW</a>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-light dropdown-toggle" data-bs-toggle="dropdown"></button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="@($"challenges/edit?id={challenge.Id}")">Edit Settings</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="@($"challenges/delete?id={challenge.Id}")">Delete</a></li>
-                        </ul>
+                <div class="d-flex align-items-center" style="position: relative;">
+                    <a class="btn btn-sm btn-outline-dark me-1" href="@($"challenges/details?id={challenge.Id}")">JOIN</a>
+
+                    <div class="fd-native-dropdown">
+                        <button class="btn btn-sm btn-light border" type="button" @onclick="() => ToggleDropdown(challenge.Id)">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+
+                        @if (openDropdownId == challenge.Id)
+                        {
+                            <ul class="fd-dropdown-menu shadow animate-fade-in">
+                                <li>
+                                    <a class="dropdown-item" href="@($"challenges/edit?id={challenge.Id}")">
+                                        <i class="bi bi-pencil me-2"></i>Edit Settings
+                                    </a>
+                                </li>
+
+                                <AuthorizeView Roles="Administrator">
+                                    <Authorized>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <a class="dropdown-item text-danger" href="@($"challenges/delete?id={challenge.Id}")">
+                                                <i class="bi bi-trash me-2"></i>Delete Challenge
+                                            </a>
+                                        </li>
+                                    </Authorized>
+                                </AuthorizeView>
+                            </ul>
+                            <div class="fd-dropdown-overlay" @onclick="() => openDropdownId = 0"></div>
+                        }
                     </div>
                 </div>
             </TemplateColumn>
@@ -78,6 +97,92 @@
 </div>
 
 <style>
+    /* --- Table Header Colors (FORCED WHITE) --- */
+
+    /* 1. Force the container background */
+    .challenge-table thead,
+    .challenge-table thead tr {
+        background-color: #222 !important;
+    }
+
+        /* 2. Target the cells and any buttons QuickGrid creates inside them */
+        .challenge-table thead th,
+        .challenge-table thead th button {
+            color: white !important;
+            background-color: #222 !important;
+            font-weight: 900 !important;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            border: none !important;
+        }
+
+            /* 3. Deep target for the internal QuickGrid text span */
+            .challenge-table thead th ::deep .col-title-text {
+                color: white !important;
+            }
+
+            /* 4. Deep target for the sort arrows */
+            .challenge-table thead th ::deep .sort-indicator {
+                filter: brightness(0) invert(1) !important;
+            }
+
+    /* Layout Fixes */
+    .fd-grid-container {
+        overflow: visible !important;
+    }
+
+    .challenge-table {
+        overflow: visible !important;
+    }
+
+    /* Dropdown UI */
+    .fd-native-dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .fd-dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 2000;
+        display: block;
+        min-width: 180px;
+        padding: 0.5rem 0;
+        margin-top: 5px;
+        background-color: #fff;
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 4px;
+        list-style: none;
+        text-align: left;
+    }
+
+    .fd-dropdown-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1500;
+        background: transparent;
+    }
+
+    .dropdown-item {
+        display: block;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        color: #212529;
+        text-decoration: none;
+    }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #000;
+        }
+
+    /* Food.com Branding Styles */
     .fw-black {
         font-weight: 900;
         letter-spacing: -1px;
@@ -115,7 +220,7 @@
         }
 
     .btn-challenge-action {
-        background-color: #f5eb3b; /* Food.com Yellow */
+        background-color: #f5eb3b;
         color: #222;
         font-weight: 800;
         border: 2px solid #222;
@@ -128,29 +233,42 @@
             color: #f5eb3b;
         }
 
-    .challenge-table {
-        vertical-align: middle;
-    }
-
-        .challenge-table thead {
-            background: #222;
-            color: white;
-            text-transform: uppercase;
-            font-size: 0.7rem;
-        }
-
     .badge {
         padding: 8px 12px;
         font-weight: 700;
         border-radius: 4px;
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.15s ease-out;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 </style>
 
 @code {
     private BestRecipesContext context = default!;
     private string searchText = "";
+    private int openDropdownId = 0;
 
-    // Filtering logic
+    private void ToggleDropdown(int id)
+    {
+        if (openDropdownId == id)
+            openDropdownId = 0;
+        else
+            openDropdownId = id;
+    }
+
     private IQueryable<Challenge> FilteredChallenges => context.Challenge
         .Where(c => string.IsNullOrEmpty(searchText) || c.Name.Contains(searchText))
         .OrderByDescending(c => c.EndDate);
@@ -160,10 +278,7 @@
         context = DbFactory.CreateDbContext();
     }
 
-    private string GetStatus(DateTime endDate)
-    {
-        return endDate >= DateTime.Now ? "Active" : "Expired";
-    }
+    private string GetStatus(DateTime endDate) => endDate >= DateTime.Now ? "Active" : "Expired";
 
     public async ValueTask DisposeAsync() => await context.DisposeAsync();
 }
