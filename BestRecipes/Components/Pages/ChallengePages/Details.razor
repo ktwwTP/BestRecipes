@@ -1,48 +1,217 @@
 ﻿@page "/challenges/details"
 @using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.Authorization
 @using BestRecipes.Domain
 @inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
 
-<PageTitle>Details</PageTitle>
+<PageTitle>Challenge Details | BestRecipes</PageTitle>
 
-<h1>Details</h1>
+@if (challenge is null)
+{
+    <div class="text-center py-5">
+        <div class="spinner-border text-warning" role="status"></div>
+        <p class="mt-2 fw-bold">Loading Challenge...</p>
+    </div>
+}
+else
+{
+    <div class="challenge-details-container">
 
-<div>
-    <h2>Challenge</h2>
-    <hr />
-    @if (challenge is null)
-    {
-        <p><em>Loading...</em></p>
-    }
-    else {
-        <dl class="row">
-            <dt class="col-sm-2">Name</dt>
-            <dd class="col-sm-10">@challenge.Name</dd>
-            <dt class="col-sm-2">Details</dt>
-            <dd class="col-sm-10">@challenge.Details</dd>
-            <dt class="col-sm-2">StartDate</dt>
-            <dd class="col-sm-10">@challenge.StartDate</dd>
-            <dt class="col-sm-2">EndDate</dt>
-            <dd class="col-sm-10">@challenge.EndDate</dd>
-            <dt class="col-sm-2">DateCreated</dt>
-            <dd class="col-sm-10">@challenge.DateCreated</dd>
-            <dt class="col-sm-2">DateUpdated</dt>
-            <dd class="col-sm-10">@challenge.DateUpdated</dd>
-            <dt class="col-sm-2">CreatedBy</dt>
-            <dd class="col-sm-10">@challenge.CreatedBy</dd>
-            <dt class="col-sm-2">UpdatedBy</dt>
-            <dd class="col-sm-10">@challenge.UpdatedBy</dd>
-        </dl>
-        <div>
-            <a href="@($"/challenges/edit?id={challenge.Id}")">Edit</a> |
-            <a href="@($"/challenges")">Back to List</a>
+        @* --- HERO SECTION --- *@
+        <div class="details-hero">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <a href="/challenges" class="btn btn-outline-light btn-sm fw-bold">
+                        <i class="bi bi-arrow-left"></i> BACK TO LIST
+                    </a>
+
+                    @{
+                        var isActive = challenge.EndDate > DateTime.Now;
+                        <span class="badge @(isActive ? "bg-warning text-dark" : "bg-secondary text-white") fs-6 px-3 py-2">
+                            @(isActive ? "ACTIVE CHALLENGE" : "EXPIRED")
+                        </span>
+                    }
+                </div>
+
+                <h1 class="hero-title">@challenge.Name.ToUpper()</h1>
+
+                <div class="hero-meta">
+                    <div class="meta-item">
+                        <i class="bi bi-calendar-event"></i>
+                        <span>STARTS: @challenge.StartDate.ToShortDateString()</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-flag-fill"></i>
+                        <span>ENDS: @challenge.EndDate.ToShortDateString()</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-person-circle"></i>
+                        <span>HOST: @challenge.CreatedBy?.ToUpper()</span>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        @* --- MAIN CONTENT --- *@
+        <div class="container mt-5 mb-5">
+            <div class="row g-5">
+
+                @* LEFT COLUMN: Description *@
+                <div class="col-lg-8">
+                    <div class="content-section">
+                        <h2 class="section-title">ABOUT THIS CHALLENGE</h2>
+                        <p class="lead-text">
+                            @challenge.Details
+                        </p>
+                    </div>
+
+                    @* Action Area *@
+                    <div class="mt-5 p-4 bg-light border-start border-5 border-warning">
+                        <h4 class="fw-black">READY TO COMPETE?</h4>
+                        <p class="text-muted">Join now to submit your recipe and win badges.</p>
+
+                        @* FIX: We use a standard <a> tag instead of a button.
+                           The 'joinUrl' variable is calculated in the code below.
+                           This works instantly even on static pages.
+                        *@
+                        <a href="@joinUrl" class="btn fd-btn-primary btn-lg text-decoration-none">
+                            JOIN CHALLENGE
+                        </a>
+                    </div>
+                </div>
+
+                @* RIGHT COLUMN: Sidebar Stats *@
+                <div class="col-lg-4">
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body p-4">
+                            <h5 class="fw-black mb-3">TIMELINE</h5>
+
+                            @if (challenge.EndDate > DateTime.Now)
+                            {
+                                var timeRemaining = challenge.EndDate - DateTime.Now;
+                                <div class="alert alert-warning text-center fw-bold">
+                                    <i class="bi bi-stopwatch"></i> @timeRemaining.Days DAYS LEFT
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-secondary text-center fw-bold">
+                                    CHALLENGE ENDED
+                                </div>
+                            }
+
+                            <hr />
+
+                            <div class="small text-muted">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Created:</span>
+                                    <span class="fw-bold text-dark">@challenge.DateCreated.ToShortDateString()</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Last Updated:</span>
+                                    <span class="fw-bold text-dark">@challenge.DateUpdated.ToShortDateString()</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Updated By:</span>
+                                    <span class="fw-bold text-dark">@(challenge.UpdatedBy ?? "N/A")</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a href="@($"challenges/edit?id={challenge.Id}")" class="btn btn-dark fw-bold">
+                            <i class="bi bi-pencil-square"></i> EDIT SETTINGS
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    :root {
+        --fd-yellow: #F5EB3B;
+        --fd-black: #222222;
+        --fd-grey: #757575;
     }
-</div>
+
+    .details-hero {
+        background-color: var(--fd-black);
+        color: white;
+        padding: 80px 0;
+        position: relative;
+    }
+
+    .hero-title {
+        font-family: 'Arial Black', Gadget, sans-serif;
+        font-size: 3.5rem;
+        font-weight: 900;
+        letter-spacing: -2px;
+        margin: 20px 0;
+        line-height: 1.1;
+    }
+
+    .hero-meta {
+        display: flex;
+        gap: 30px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #ccc;
+        flex-wrap: wrap;
+    }
+
+    .meta-item i {
+        color: var(--fd-yellow);
+        margin-right: 8px;
+        font-size: 1.1rem;
+    }
+
+    .section-title {
+        font-weight: 900;
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: var(--fd-black);
+        border-bottom: 3px solid var(--fd-yellow);
+        display: inline-block;
+        padding-bottom: 5px;
+    }
+
+    .lead-text {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #444;
+    }
+
+    .fw-black {
+        font-weight: 900;
+    }
+
+    .fd-btn-primary {
+        background-color: var(--fd-yellow);
+        color: var(--fd-black);
+        border: 2px solid var(--fd-black);
+        border-radius: 0;
+        font-weight: 900;
+        padding: 10px 30px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: inline-block;
+        text-align: center;
+    }
+
+        .fd-btn-primary:hover {
+            background-color: var(--fd-black);
+            color: var(--fd-yellow);
+        }
+</style>
 
 @code {
     private Challenge? challenge;
+    private string joinUrl = "";
 
     [SupplyParameterFromQuery]
     private int Id { get; set; }
@@ -55,6 +224,24 @@
         if (challenge is null)
         {
             NavigationManager.NavigateTo("notfound");
+            return;
+        }
+
+        // --- PRE-CALCULATE THE LINK DESTINATION ---
+        // This runs on the server when the page loads, deciding where the button should point.
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            // If logged in -> Point to Create Recipe page
+            joinUrl = $"/recipes/create?challengeId={Id}";
+        }
+        else
+        {
+            // If NOT logged in -> Point to Login page (with return URL back to this page)
+            var returnUrl = Uri.EscapeDataString(NavigationManager.Uri);
+            joinUrl = $"/Account/Login?returnUrl={returnUrl}";
         }
     }
 }

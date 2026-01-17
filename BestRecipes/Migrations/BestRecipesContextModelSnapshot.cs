@@ -91,14 +91,13 @@ namespace BestRecipes.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-<<<<<<< HEAD
 
                     b.HasData(
                         new
                         {
                             Id = "3781efa7-66dc-47f0-860f-e506d04102e4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "073e669e-6c59-4cd3-85a0-85befa9bd8cb",
+                            ConcurrencyStamp = "abf70544-a8c5-4f06-be41-fc37a3d6d9c1",
                             Email = "admin@localhost.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -106,14 +105,12 @@ namespace BestRecipes.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJKDhm9mVTw95AAkRNWL7tNXgJIBHO8sClpY+tV3hqgV5/AHpzE3ALjO/BsoqiEodw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIt4vB0ISYb9bdQ/539lAGuZQclsP4chwbUy1mI1mwKgu5pOnlYqFZl3SRH+HTFAgw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1e6c63d6-f94f-497c-a96a-19ce3421f207",
+                            SecurityStamp = "68c4c26a-3634-49cc-9b74-5f1114bac538",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         });
-=======
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
                 });
 
             modelBuilder.Entity("BestRecipes.Domain.Category", b =>
@@ -152,39 +149,24 @@ namespace BestRecipes.Migrations
                         new
                         {
                             Id = 1,
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 15, 0, 56, 22, 425, DateTimeKind.Local).AddTicks(9990),
-                            DateUpdated = new DateTime(2026, 1, 15, 0, 56, 22, 426, DateTimeKind.Local),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(800),
-                            DateUpdated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(820),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 19, 56, 15, 478, DateTimeKind.Local).AddTicks(4264),
+                            DateUpdated = new DateTime(2026, 1, 14, 19, 56, 15, 478, DateTimeKind.Local).AddTicks(4284),
                             Description = "Start your meal with delicious appetizers.",
                             Name = "Appetizers"
                         },
                         new
                         {
                             Id = 2,
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 15, 0, 56, 22, 426, DateTimeKind.Local).AddTicks(2),
-                            DateUpdated = new DateTime(2026, 1, 15, 0, 56, 22, 426, DateTimeKind.Local).AddTicks(3),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(822),
-                            DateUpdated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(822),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 19, 56, 15, 478, DateTimeKind.Local).AddTicks(4286),
+                            DateUpdated = new DateTime(2026, 1, 14, 19, 56, 15, 478, DateTimeKind.Local).AddTicks(4287),
                             Description = "Hearty and satisfying main course recipes.",
                             Name = "Main Courses"
                         },
                         new
                         {
                             Id = 3,
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 15, 0, 56, 22, 426, DateTimeKind.Local).AddTicks(5),
-                            DateUpdated = new DateTime(2026, 1, 15, 0, 56, 22, 426, DateTimeKind.Local).AddTicks(5),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(824),
-                            DateUpdated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(825),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 19, 56, 15, 478, DateTimeKind.Local).AddTicks(4288),
+                            DateUpdated = new DateTime(2026, 1, 14, 19, 56, 15, 478, DateTimeKind.Local).AddTicks(4289),
                             Description = "Sweet treats to end your meal.",
                             Name = "Desserts"
                         });
@@ -232,13 +214,8 @@ namespace BestRecipes.Migrations
                         new
                         {
                             Id = 1,
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 15, 0, 56, 22, 426, DateTimeKind.Local).AddTicks(150),
-                            DateUpdated = new DateTime(2026, 1, 15, 0, 56, 22, 426, DateTimeKind.Local).AddTicks(150),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(1170),
-                            DateUpdated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(1172),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 19, 56, 15, 478, DateTimeKind.Local).AddTicks(4535),
+                            DateUpdated = new DateTime(2026, 1, 14, 19, 56, 15, 478, DateTimeKind.Local).AddTicks(4536),
                             Details = "Create the most refreshing and healthy summer salad.",
                             EndDate = new DateTime(2024, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Summer Salad Challenge",
@@ -247,13 +224,8 @@ namespace BestRecipes.Migrations
                         new
                         {
                             Id = 2,
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 15, 0, 56, 22, 426, DateTimeKind.Local).AddTicks(152),
-                            DateUpdated = new DateTime(2026, 1, 15, 0, 56, 22, 426, DateTimeKind.Local).AddTicks(153),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(1177),
-                            DateUpdated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(1177),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 19, 56, 15, 478, DateTimeKind.Local).AddTicks(4538),
+                            DateUpdated = new DateTime(2026, 1, 14, 19, 56, 15, 478, DateTimeKind.Local).AddTicks(4539),
                             Details = "Bake a delicious dessert perfect for the holiday season.",
                             EndDate = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Holiday Dessert Challenge",
@@ -304,13 +276,8 @@ namespace BestRecipes.Migrations
                             Id = 1,
                             Content = "This recipe is fantastic! My family loved it.",
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(215),
-                            DateUpdated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(215),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1360),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1360),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4636),
+                            DateUpdated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4637),
                             RecipeId = 1,
                             UserId = 2
                         },
@@ -319,13 +286,8 @@ namespace BestRecipes.Migrations
                             Id = 2,
                             Content = "I found the instructions a bit confusing, but the end result was great.",
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(217),
-                            DateUpdated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(217),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1361),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1362),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4639),
+                            DateUpdated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4640),
                             RecipeId = 2,
                             UserId = 3
                         },
@@ -334,13 +296,8 @@ namespace BestRecipes.Migrations
                             Id = 3,
                             Content = "Delicious! I will definitely make this again.",
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(218),
-                            DateUpdated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(219),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1363),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1364),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4641),
+                            DateUpdated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4642),
                             RecipeId = 3,
                             UserId = 1
                         });
@@ -388,13 +345,8 @@ namespace BestRecipes.Migrations
                             Id = 1,
                             CategoryId = 0,
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(276),
-                            DateUpdated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(276),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1518),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1519),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4759),
+                            DateUpdated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4759),
                             RecipeId = 2,
                             UserId = 1
                         },
@@ -403,13 +355,8 @@ namespace BestRecipes.Migrations
                             Id = 2,
                             CategoryId = 0,
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(278),
-                            DateUpdated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(278),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1520),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1521),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4761),
+                            DateUpdated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4762),
                             RecipeId = 3,
                             UserId = 2
                         },
@@ -418,13 +365,8 @@ namespace BestRecipes.Migrations
                             Id = 3,
                             CategoryId = 0,
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(306),
-                            DateUpdated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(307),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1522),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1522),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4763),
+                            DateUpdated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4764),
                             RecipeId = 1,
                             UserId = 3
                         });
@@ -472,13 +414,8 @@ namespace BestRecipes.Migrations
                         new
                         {
                             Id = 1,
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(370),
-                            DateUpdated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(371),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1696),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1697),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4855),
+                            DateUpdated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4855),
                             DownVote = 10,
                             Name = "Sugar",
                             UnitOfMeasurement = "Cups",
@@ -487,13 +424,8 @@ namespace BestRecipes.Migrations
                         new
                         {
                             Id = 2,
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(372),
-                            DateUpdated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(373),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1698),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1699),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4857),
+                            DateUpdated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4858),
                             DownVote = 5,
                             Name = "Salt",
                             UnitOfMeasurement = "Teaspoons",
@@ -502,13 +434,8 @@ namespace BestRecipes.Migrations
                         new
                         {
                             Id = 3,
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(374),
-                            DateUpdated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(374),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1700),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1701),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4860),
+                            DateUpdated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4860),
                             DownVote = 8,
                             Name = "Flour",
                             UnitOfMeasurement = "Cups",
@@ -582,13 +509,8 @@ namespace BestRecipes.Migrations
                             Id = 1,
                             CategoryId = 2,
                             CookingDuration = 0,
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(434),
-                            DateUpdated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(434),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(2045),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(2046),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4971),
+                            DateUpdated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4972),
                             Description = "Fluffy and light pancakes perfect for breakfast.",
                             IngredientId = 0,
                             Instructions = "Mix ingredients, cook on griddle, serve with syrup.",
@@ -603,13 +525,8 @@ namespace BestRecipes.Migrations
                             Id = 2,
                             CategoryId = 1,
                             CookingDuration = 0,
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(436),
-                            DateUpdated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(436),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(2048),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(2049),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4974),
+                            DateUpdated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4974),
                             Description = "Crisp romaine lettuce with creamy Caesar dressing.",
                             IngredientId = 0,
                             Instructions = "Toss lettuce with dressing, add croutons and cheese.",
@@ -624,13 +541,8 @@ namespace BestRecipes.Migrations
                             Id = 3,
                             CategoryId = 3,
                             CookingDuration = 0,
-<<<<<<< HEAD
-                            DateCreated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(437),
-                            DateUpdated = new DateTime(2026, 1, 14, 16, 56, 22, 426, DateTimeKind.Utc).AddTicks(437),
-=======
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(2050),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(2051),
->>>>>>> parent of 754e07d (Done Login, Register, Popular Recipe, Challenge pages and design)
+                            DateCreated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4976),
+                            DateUpdated = new DateTime(2026, 1, 14, 11, 56, 15, 478, DateTimeKind.Utc).AddTicks(4976),
                             Description = "Chewy cookies loaded with chocolate chips.",
                             IngredientId = 0,
                             Instructions = "Mix dough, fold in chocolate chips, bake until golden.",

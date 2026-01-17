@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Authorization
+@inject NavigationManager NavManager
 
 <PageTitle>Home - BestRecipes</PageTitle>
 
@@ -9,6 +10,21 @@
         <div class="fd-label">EST. 2024</div>
         <h1 class="hero-title">WELCOME TO BESTRECIPES</h1>
         <p class="hero-subtitle">Discover, Share, and Create Amazing Recipes with our community.</p>
+
+        @* --- UPDATED SEARCH BAR (HTML FORM) --- *@
+        @* We switched to a <form>. This works on static pages and handles the Enter key automatically. *@
+        <form action="recipes" method="get" class="hero-search-container mb-4">
+            <div class="input-group">
+                @* IMPORTANT: name="search" must match the parameter in RecipeIndex *@
+                <input type="text"
+                       name="search"
+                       class="form-control fd-hero-input"
+                       placeholder="What are you craving today?" />
+                <button type="submit" class="btn fd-btn-search">
+                    <i class="bi bi-search"></i> SEARCH
+                </button>
+            </div>
+        </form>
 
         <AuthorizeView>
             <Authorized>
@@ -99,13 +115,50 @@
         --fd-grey: #757575;
     }
 
+    /* --- Hero Search Styling --- */
+    .hero-search-container {
+        max-width: 600px;
+        margin: 0 auto 30px auto;
+    }
+
+    .fd-hero-input {
+        height: 60px;
+        border: 2px solid var(--fd-black);
+        border-right: none;
+        border-radius: 0;
+        font-size: 1.1rem;
+        padding-left: 20px;
+        font-weight: 600;
+    }
+
+        .fd-hero-input:focus {
+            box-shadow: none;
+            border-color: var(--fd-black);
+        }
+
+    .fd-btn-search {
+        background-color: var(--fd-yellow);
+        border: 2px solid var(--fd-black);
+        border-left: none;
+        border-radius: 0;
+        color: var(--fd-black);
+        font-weight: 900;
+        padding: 0 30px;
+        letter-spacing: 1px;
+    }
+
+        .fd-btn-search:hover {
+            background-color: var(--fd-black);
+            color: var(--fd-yellow);
+        }
+
     /* --- Hero Section --- */
     .home-hero {
         background-color: var(--fd-black);
         color: white;
         padding: 120px 20px;
         text-align: center;
-        border-radius: 0; /* Food.com uses sharp edges */
+        border-radius: 0;
         position: relative;
     }
 
@@ -143,9 +196,10 @@
         color: var(--fd-black);
         border: none;
         padding: 15px 40px;
-        border-radius: 0; /* Square edges */
+        border-radius: 0;
         font-weight: 900;
         letter-spacing: 1px;
+        text-decoration: none;
     }
 
         .fd-btn-yellow:hover {
@@ -161,6 +215,7 @@
         border-radius: 0;
         font-weight: 900;
         letter-spacing: 1px;
+        text-decoration: none;
     }
 
         .fd-btn-outline-white:hover {
@@ -184,7 +239,7 @@
     .feature-card {
         background: white;
         padding: 40px 30px;
-        border: 2px solid #eee; /* Light border instead of heavy shadow */
+        border: 2px solid #eee;
         text-align: center;
         height: 100%;
         transition: border-color 0.3s;
@@ -235,3 +290,8 @@
             margin-bottom: 10px;
         }
 </style>
+
+@code {
+    // No code is needed for the search anymore.
+    // The HTML <form> handles it automatically.
+}

@@ -10,12 +10,22 @@
 
 <PageTitle>Recipes | Food.com Style</PageTitle>
 
-@* --- Food.com Signature Bold Header --- *@
 <div class="recipes-page-header">
     <div class="container">
         <div class="fd-breadcrumb">HOME / RECIPES</div>
-        <h1 class="fd-title">POPULAR RECIPES</h1>
-        <p class="fd-subtitle">The community's most-loved dishes, all in one place.</p>
+
+        @if (!string.IsNullOrWhiteSpace(SearchTerm))
+        {
+            <h1 class="fd-title">RESULTS FOR "@SearchTerm.ToUpper()"</h1>
+            <p class="fd-subtitle">
+                <a href="/recipes" class="text-decoration-none text-muted">CLEAR SEARCH</a>
+            </p>
+        }
+        else
+        {
+            <h1 class="fd-title">POPULAR RECIPES</h1>
+            <p class="fd-subtitle">The community's most-loved dishes, all in one place.</p>
+        }
     </div>
 </div>
 
@@ -23,19 +33,14 @@
     <div class="container">
         <div class="row g-3 align-items-center">
             <div class="col-lg-6">
-                <div class="search-box-large">
-                    <span class="bi bi-search search-icon"></span>
+                <div class="search-box-large position-relative">
+                    <span class="bi bi-search search-icon position-absolute" style="left: 15px; top: 15px;"></span>
+                    @* 1. Updated binding to handle immediate typing updates *@
                     <input type="search"
-                           @bind="searchText"
+                           @bind="SearchTerm"
                            @bind:event="oninput"
-                           class="form-control fd-input"
+                           class="form-control fd-input ps-5"
                            placeholder="What would you like to make?" autofocus />
-                    @if (!string.IsNullOrEmpty(searchText))
-                    {
-                        <button class="clear-search" @onclick="() => searchText = string.Empty">
-                            <span class="bi bi-x-circle"></span>
-                        </button>
-                    }
                 </div>
             </div>
 
@@ -50,7 +55,7 @@
             </div>
 
             <div class="col-lg-3 col-md-6">
-                <a href="recipes/create" class="btn fd-btn-primary w-100">
+                <a href="recipes/create" class="btn fd-btn-primary w-100 text-decoration-none">
                     <span class="bi bi-plus-lg"></span> ADD A RECIPE
                 </a>
             </div>
@@ -60,7 +65,6 @@
 
 <div class="container mt-5 mb-5">
     <div class="card border-0">
-        @* QuickGrid with Food.com styling applied to the table *@
         <QuickGrid Class="table fd-table" Items="FilteredRecipes" Pagination="pagination">
             <PropertyColumn Property="recipe => recipe.Title" Sortable="true" Title="RECIPE NAME" Class="fd-column-title" />
             <PropertyColumn Property="recipe => recipe.PreparationTime" Sortable="true" Title="PREP" />
@@ -90,7 +94,6 @@
         --fd-light-grey: #F9F9F9;
     }
 
-    /* Header Styling */
     .recipes-page-header {
         background-color: white;
         padding: 50px 20px 30px 20px;
@@ -120,7 +123,6 @@
         color: var(--fd-grey);
     }
 
-    /* Filter Bar */
     .search-filter-section {
         background: white;
         padding: 15px 0;
@@ -161,9 +163,9 @@
             color: var(--fd-yellow);
         }
 
-    /* Table Styling */
     .fd-table {
         border-collapse: collapse;
+        width: 100%;
     }
 
         .fd-table thead {
@@ -177,6 +179,7 @@
                 letter-spacing: 1px;
                 padding: 15px !important;
                 border: none;
+                text-transform: uppercase;
             }
 
     .fd-column-title {
@@ -184,7 +187,6 @@
         color: var(--fd-black);
     }
 
-    /* Buttons inside Table */
     .fd-btn-outline {
         border: 1px solid var(--fd-black);
         color: var(--fd-black);
@@ -219,25 +221,37 @@
 </style>
 
 @code {
-    private string searchText = "";
+    [SupplyParameterFromQuery(Name = "search")]
+    public string? SearchTerm { get; set; } // Nullable string to handle empty URL params safely
+
     private int selectedCategory = 0;
     private List<Category> categories = new();
     private PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    private BestRecipesContext context = default!;
 
+    // 2. FIXED LOGIC: Only filter if SearchTerm actually has text
     private IQueryable<Recipe> FilteredRecipes
     {
         get
         {
-            var query = context.Recipe.Where(c => c.Title.Contains(searchText));
+            // Start with ALL recipes
+            var query = context.Recipe.AsQueryable();
+
+            // Only apply search filter if the user has typed something
+            if (!string.IsNullOrWhiteSpace(SearchTerm))
+            {
+                query = query.Where(c => c.Title.Contains(SearchTerm));
+            }
+
+            // Apply category filter if one is selected
             if (selectedCategory != 0)
             {
                 query = query.Where(r => r.CategoryId == selectedCategory);
             }
+
             return query;
         }
     }
-
-    private BestRecipesContext context = default!;
 
     protected override void OnInitialized()
     {
