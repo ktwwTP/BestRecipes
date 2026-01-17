@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BestRecipes.Migrations
 {
     [DbContext(typeof(BestRecipesContext))]
-    [Migration("20260113015404_AddDescriptionToRecipe")]
-    partial class AddDescriptionToRecipe
+    [Migration("20260117145332_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,6 +94,26 @@ namespace BestRecipes.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "3781efa7-66dc-47f0-860f-e506d04102e4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a0796e1c-2b65-4589-ae38-ec985121887d",
+                            Email = "admin@localhost.com",
+                            EmailConfirmed = true,
+                            FirstName = "Admin",
+                            LastName = "User",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@LOCALHOST.COM",
+                            NormalizedUserName = "ADMIN@LOCALHOST.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDWQ+9BeuHocSBLyUo3jkoQz/r71LuMukpcJYnlF3LxeAbzfk5+SPiO0q78H+SRBxw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "db7f88a0-5da8-42d0-9c7d-215913cdf74f",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@localhost.com"
+                        });
                 });
 
             modelBuilder.Entity("BestRecipes.Domain.Category", b =>
@@ -132,24 +152,24 @@ namespace BestRecipes.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(800),
-                            DateUpdated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(820),
+                            DateCreated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5807),
+                            DateUpdated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5823),
                             Description = "Start your meal with delicious appetizers.",
                             Name = "Appetizers"
                         },
                         new
                         {
                             Id = 2,
-                            DateCreated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(822),
-                            DateUpdated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(822),
+                            DateCreated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5824),
+                            DateUpdated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5825),
                             Description = "Hearty and satisfying main course recipes.",
                             Name = "Main Courses"
                         },
                         new
                         {
                             Id = 3,
-                            DateCreated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(824),
-                            DateUpdated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(825),
+                            DateCreated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5826),
+                            DateUpdated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5826),
                             Description = "Sweet treats to end your meal.",
                             Name = "Desserts"
                         });
@@ -197,8 +217,8 @@ namespace BestRecipes.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(1170),
-                            DateUpdated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(1172),
+                            DateCreated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(6331),
+                            DateUpdated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(6332),
                             Details = "Create the most refreshing and healthy summer salad.",
                             EndDate = new DateTime(2024, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Summer Salad Challenge",
@@ -207,8 +227,8 @@ namespace BestRecipes.Migrations
                         new
                         {
                             Id = 2,
-                            DateCreated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(1177),
-                            DateUpdated = new DateTime(2026, 1, 13, 9, 54, 2, 457, DateTimeKind.Local).AddTicks(1177),
+                            DateCreated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(6334),
+                            DateUpdated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(6334),
                             Details = "Bake a delicious dessert perfect for the holiday season.",
                             EndDate = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Holiday Dessert Challenge",
@@ -259,8 +279,8 @@ namespace BestRecipes.Migrations
                             Id = 1,
                             Content = "This recipe is fantastic! My family loved it.",
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1360),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1360),
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6432),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6432),
                             RecipeId = 1,
                             UserId = 2
                         },
@@ -269,8 +289,8 @@ namespace BestRecipes.Migrations
                             Id = 2,
                             Content = "I found the instructions a bit confusing, but the end result was great.",
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1361),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1362),
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6433),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6434),
                             RecipeId = 2,
                             UserId = 3
                         },
@@ -279,8 +299,8 @@ namespace BestRecipes.Migrations
                             Id = 3,
                             Content = "Delicious! I will definitely make this again.",
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1363),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1364),
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6435),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6435),
                             RecipeId = 3,
                             UserId = 1
                         });
@@ -328,8 +348,8 @@ namespace BestRecipes.Migrations
                             Id = 1,
                             CategoryId = 0,
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1518),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1519),
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6500),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6501),
                             RecipeId = 2,
                             UserId = 1
                         },
@@ -338,8 +358,8 @@ namespace BestRecipes.Migrations
                             Id = 2,
                             CategoryId = 0,
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1520),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1521),
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6502),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6502),
                             RecipeId = 3,
                             UserId = 2
                         },
@@ -348,8 +368,8 @@ namespace BestRecipes.Migrations
                             Id = 3,
                             CategoryId = 0,
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1522),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1522),
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6503),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6504),
                             RecipeId = 1,
                             UserId = 3
                         });
@@ -362,6 +382,9 @@ namespace BestRecipes.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -376,11 +399,6 @@ namespace BestRecipes.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UnitOfMeasurement")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UpVote")
@@ -397,32 +415,92 @@ namespace BestRecipes.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1696),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1697),
-                            DownVote = 10,
-                            Name = "Sugar",
-                            UnitOfMeasurement = "Cups",
-                            UpVote = 150
+                            Category = "Pantry",
+                            DateCreated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DownVote = 0,
+                            Name = "All-Purpose Flour",
+                            UpVote = 180
                         },
                         new
                         {
                             Id = 2,
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1698),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1699),
-                            DownVote = 5,
-                            Name = "Salt",
-                            UnitOfMeasurement = "Teaspoons",
-                            UpVote = 200
+                            Category = "Pantry",
+                            DateCreated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DownVote = 0,
+                            Name = "Granulated Sugar",
+                            UpVote = 150
                         },
                         new
                         {
                             Id = 3,
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1700),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(1701),
-                            DownVote = 8,
-                            Name = "Flour",
-                            UnitOfMeasurement = "Cups",
-                            UpVote = 180
+                            Category = "Pantry",
+                            DateCreated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DownVote = 2,
+                            Name = "Olive Oil",
+                            UpVote = 210
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Category = "Dairy",
+                            DateCreated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DownVote = 0,
+                            Name = "Unsalted Butter",
+                            UpVote = 95
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Category = "Dairy",
+                            DateCreated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DownVote = 0,
+                            Name = "Whole Milk",
+                            UpVote = 70
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Category = "Produce",
+                            DateCreated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DownVote = 1,
+                            Name = "Garlic",
+                            UpVote = 300
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Category = "Produce",
+                            DateCreated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DownVote = 5,
+                            Name = "Yellow Onion",
+                            UpVote = 120
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Category = "Spices",
+                            DateCreated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DownVote = 0,
+                            Name = "Kosher Salt",
+                            UpVote = 400
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Category = "Spices",
+                            DateCreated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateUpdated = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DownVote = 0,
+                            Name = "Black Pepper",
+                            UpVote = 250
                         });
                 });
 
@@ -453,12 +531,15 @@ namespace BestRecipes.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IngredientId")
-                        .HasColumnType("int");
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Instructions")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsTrending")
+                        .HasColumnType("bit");
 
                     b.Property<int>("PreparationTime")
                         .HasColumnType("int");
@@ -486,11 +567,11 @@ namespace BestRecipes.Migrations
                             Id = 1,
                             CategoryId = 2,
                             CookingDuration = 0,
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(2045),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(2046),
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6014),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6014),
                             Description = "Fluffy and light pancakes perfect for breakfast.",
-                            IngredientId = 0,
                             Instructions = "Mix ingredients, cook on griddle, serve with syrup.",
+                            IsTrending = false,
                             PreparationTime = 0,
                             ServingSize = 0,
                             Title = "Classic Pancakes",
@@ -501,11 +582,11 @@ namespace BestRecipes.Migrations
                             Id = 2,
                             CategoryId = 1,
                             CookingDuration = 0,
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(2048),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(2049),
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6016),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6016),
                             Description = "Crisp romaine lettuce with creamy Caesar dressing.",
-                            IngredientId = 0,
                             Instructions = "Toss lettuce with dressing, add croutons and cheese.",
+                            IsTrending = false,
                             PreparationTime = 0,
                             ServingSize = 0,
                             Title = "Caesar Salad",
@@ -516,15 +597,186 @@ namespace BestRecipes.Migrations
                             Id = 3,
                             CategoryId = 3,
                             CookingDuration = 0,
-                            DateCreated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(2050),
-                            DateUpdated = new DateTime(2026, 1, 13, 1, 54, 2, 457, DateTimeKind.Utc).AddTicks(2051),
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6017),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6018),
                             Description = "Chewy cookies loaded with chocolate chips.",
-                            IngredientId = 0,
                             Instructions = "Mix dough, fold in chocolate chips, bake until golden.",
+                            IsTrending = false,
                             PreparationTime = 0,
                             ServingSize = 0,
                             Title = "Chocolate Chip Cookies",
                             UserId = 0
+                        });
+                });
+
+            modelBuilder.Entity("BestRecipes.Domain.RecipeIngredient", b =>
+                {
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IngredientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Unit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RecipeId", "IngredientId");
+
+                    b.HasIndex("IngredientId");
+
+                    b.ToTable("RecipeIngredient");
+
+                    b.HasData(
+                        new
+                        {
+                            RecipeId = 1,
+                            IngredientId = 1,
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6096),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6096),
+                            Id = 0,
+                            Notes = "sifted",
+                            Quantity = 200m
+                        },
+                        new
+                        {
+                            RecipeId = 1,
+                            IngredientId = 2,
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6098),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6098),
+                            Id = 0,
+                            Notes = "",
+                            Quantity = 30m
+                        },
+                        new
+                        {
+                            RecipeId = 1,
+                            IngredientId = 5,
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6099),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6099),
+                            Id = 0,
+                            Notes = "room temperature",
+                            Quantity = 250m
+                        },
+                        new
+                        {
+                            RecipeId = 1,
+                            IngredientId = 4,
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6101),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6101),
+                            Id = 0,
+                            Notes = "melted",
+                            Quantity = 50m
+                        },
+                        new
+                        {
+                            RecipeId = 1,
+                            IngredientId = 8,
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6102),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6103),
+                            Id = 0,
+                            Notes = "pinch",
+                            Quantity = 1m
+                        },
+                        new
+                        {
+                            RecipeId = 2,
+                            IngredientId = 7,
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6105),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6105),
+                            Id = 0,
+                            Notes = "finely chopped",
+                            Quantity = 0.25m
+                        },
+                        new
+                        {
+                            RecipeId = 2,
+                            IngredientId = 3,
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6106),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6107),
+                            Id = 0,
+                            Notes = "for dressing",
+                            Quantity = 50m
+                        },
+                        new
+                        {
+                            RecipeId = 2,
+                            IngredientId = 8,
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6108),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6108),
+                            Id = 0,
+                            Notes = "to taste",
+                            Quantity = 1m
+                        },
+                        new
+                        {
+                            RecipeId = 2,
+                            IngredientId = 9,
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6109),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6109),
+                            Id = 0,
+                            Notes = "freshly ground",
+                            Quantity = 1m
+                        },
+                        new
+                        {
+                            RecipeId = 3,
+                            IngredientId = 1,
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6110),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6111),
+                            Id = 0,
+                            Notes = "sifted",
+                            Quantity = 180m
+                        },
+                        new
+                        {
+                            RecipeId = 3,
+                            IngredientId = 2,
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6112),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6112),
+                            Id = 0,
+                            Notes = "",
+                            Quantity = 100m
+                        },
+                        new
+                        {
+                            RecipeId = 3,
+                            IngredientId = 4,
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6113),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6113),
+                            Id = 0,
+                            Notes = "softened",
+                            Quantity = 100m
+                        },
+                        new
+                        {
+                            RecipeId = 3,
+                            IngredientId = 8,
+                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6114),
+                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6115),
+                            Id = 0,
+                            Notes = "to balance sweetness",
+                            Quantity = 0.5m
                         });
                 });
 
@@ -553,6 +805,20 @@ namespace BestRecipes.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "ad2bcf0c-20db-474f-8407-5a6b159518ba",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "bd2bcf0c-20db-474f-8407-5a6b159518bb",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -640,6 +906,13 @@ namespace BestRecipes.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "3781efa7-66dc-47f0-860f-e506d04102e4",
+                            RoleId = "ad2bcf0c-20db-474f-8407-5a6b159518ba"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -659,6 +932,25 @@ namespace BestRecipes.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("BestRecipes.Domain.RecipeIngredient", b =>
+                {
+                    b.HasOne("BestRecipes.Domain.Ingredient", "Ingredient")
+                        .WithMany("RecipeIngredients")
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BestRecipes.Domain.Recipe", "Recipe")
+                        .WithMany("RecipeIngredients")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ingredient");
+
+                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -710,6 +1002,16 @@ namespace BestRecipes.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("BestRecipes.Domain.Ingredient", b =>
+                {
+                    b.Navigation("RecipeIngredients");
+                });
+
+            modelBuilder.Entity("BestRecipes.Domain.Recipe", b =>
+                {
+                    b.Navigation("RecipeIngredients");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,5 @@
 ﻿@page "/recipes/create"
+@rendermode InteractiveServer
 @using Microsoft.EntityFrameworkCore
 @using BestRecipes.Domain
 @using System.IO
@@ -8,6 +9,7 @@
 @inject NavigationManager NavigationManager
 @inject IWebHostEnvironment Environment
 @inject AuthenticationStateProvider AuthStateProvider
+@inject IJSRuntime JS
 
 <PageTitle>Create Recipe</PageTitle>
 
@@ -15,71 +17,53 @@
     <h1 class="fd-section-title text-start">SHARE A RECIPE</h1>
     <hr style="border: 2px solid var(--fd-black); opacity: 1;" />
 
-    <div class="row">
-        <div class="col-md-6">
-            @* Note: 'Enhance' is removed to allow standard file streaming *@
-            <EditForm method="post" Model="Recipe" OnValidSubmit="AddRecipe" FormName="create">
-                <DataAnnotationsValidator />
-                <ValidationSummary class="text-danger" role="alert" />
+    <EditForm Model="Recipe" OnValidSubmit="AddRecipe" FormName="create">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="text-danger" />
 
+        <div class="row">
+            @* Left Column: Basic Details *@
+            <div class="col-md-5">
                 <div class="mb-3">
-                    <label class="fd-label" style="color:black">RECIPE TITLE</label>
-                    <InputText id="title" @bind-Value="Recipe.Title" class="form-control fd-input" />
+                    <label class="fd-label">RECIPE TITLE</label>
+                    <InputText @bind-Value="Recipe.Title" class="form-control fd-input" placeholder="e.g. Spicy Ramen" />
                     <ValidationMessage For="() => Recipe.Title" class="text-danger" />
                 </div>
 
-                @* --- NEW IMAGE UPLOAD SECTION --- *@
-                <div class="mb-4 p-3" style="background: #f8f9fa; border: 2px dashed #ccc;">
-                    <label class="fd-label" style="color:black">UPLOAD PHOTO</label>
+                <div class="mb-4 p-3 upload-box">
+                    <label class="fd-label">UPLOAD PHOTO</label>
                     <InputFile OnChange="HandleFileSelected" class="form-control" />
-                    <small class="text-muted">Max size: 5MB (jpg, png)</small>
-
                     @if (!string.IsNullOrEmpty(Recipe.ImageUrl))
                     {
-                        <div class="mt-2">
-                            <img src="@Recipe.ImageUrl" style="max-height: 150px; border: 2px solid var(--fd-black);" />
-                        </div>
+                        <img src="@Recipe.ImageUrl" class="mt-2 preview-img" />
                     }
+                    <small class="text-muted d-block mt-1">Max size: 5MB</small>
                 </div>
-                @* -------------------------------- *@
 
                 <div class="mb-3">
-                    <label class="fd-label" style="color:black">DESCRIPTION</label>
+                    <label class="fd-label">DESCRIPTION</label>
                     <InputTextArea @bind-Value="Recipe.Description" class="form-control fd-input" rows="3" />
-                    <ValidationMessage For="() => Recipe.Description" class="text-danger" />
                 </div>
 
-                @* Row for numbers *@
                 <div class="row">
                     <div class="col-md-4 mb-3">
-                        <label class="fd-label" style="color:black">PREP (MINS)</label>
+                        <label class="fd-label">PREP (MINS)</label>
                         <InputNumber @bind-Value="Recipe.PreparationTime" class="form-control fd-input" />
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="fd-label" style="color:black">COOK (MINS)</label>
+                        <label class="fd-label">COOK (MINS)</label>
                         <InputNumber @bind-Value="Recipe.CookingDuration" class="form-control fd-input" />
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label class="fd-label" style="color:black">SERVES</label>
+                        <label class="fd-label">SERVES</label>
                         <InputNumber @bind-Value="Recipe.ServingSize" class="form-control fd-input" />
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="fd-label" style="color:black">COOKING INSTRUCTIONS</label>
-                    <InputTextArea id="instructions"
-                                   @bind-Value="Recipe.Instructions"
-                                   class="form-control fd-input"
-                                   rows="8"
-                                   placeholder="Step 1: Preheat oven...&#10;Step 2: Chop the onions..." />
-                    <ValidationMessage For="() => Recipe.Instructions" class="text-danger" />
-                    <small class="text-muted">Tip: Describe each step clearly on a new line.</small>
-                </div>
-
-                <div class="mb-3">
-                    <label class="fd-label" style="color:black">CATEGORY</label>
+                    <label class="fd-label">CATEGORY</label>
                     <InputSelect @bind-Value="Recipe.CategoryId" class="form-control fd-input">
-                        <option value="">-- Select a Category --</option>
+                        <option value="">-- Select Category --</option>
                         @if (categories != null)
                         {
                             @foreach (var cat in categories)
@@ -88,116 +72,244 @@
                             }
                         }
                     </InputSelect>
-                    <ValidationMessage For="() => Recipe.CategoryId" class="text-danger" />
+                </div>
+            </div>
+
+            @* Right Column: Ingredients & Instructions *@
+            <div class="col-md-7">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label class="fd-label m-0">INGREDIENTS</label>
+                        <button type="button" class="btn btn-link btn-sm p-0 text-dark fw-bold" @onclick="ShowIngredientModal">+ NEW INGREDIENT</button>
+                    </div>
+
+                    <div class="ingredient-container p-3">
+                        @foreach (var ri in Recipe.RecipeIngredients)
+                        {
+                            <div class="row g-2 mb-2 align-items-center">
+                                <div class="col-4">
+                                    <InputSelect @bind-Value="ri.IngredientId" class="form-control fd-input-sm">
+                                        <option value="0">Select...</option>
+                                        @if (allIngredients != null)
+                                        {
+                                            @foreach (var ing in allIngredients)
+                                            {
+                                                <option value="@ing.Id">@ing.Name</option>
+                                            }
+                                        }
+                                    </InputSelect>
+                                </div>
+                                <div class="col-3">
+                                    <InputNumber @bind-Value="ri.Quantity" class="form-control fd-input-sm" step="0.01" placeholder="Qty" />
+                                </div>
+                                <div class="col-3">
+                                    <InputSelect @bind-Value="ri.Unit" class="form-control fd-input-sm">
+                                        <option value="">Unit...</option>
+                                        @foreach (var unit in CommonUnits)
+                                        {
+                                            <option value="@unit">@unit</option>
+                                        }
+                                    </InputSelect>
+                                </div>
+                                <div class="col-2 text-end">
+                                    <button type="button" class="btn btn-outline-danger btn-sm border-0" @onclick="() => RemoveIngredient(ri)">
+                                        <i class="bi bi-x-lg">X</i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                        <button type="button" class="btn fd-btn-outline-dark btn-sm mt-2 w-100" @onclick="AddIngredientRow">
+                            + ADD ANOTHER ROW
+                        </button>
+                    </div>
                 </div>
 
-                @* Hidden/System fields (You can automate these later) *@
-                <div class="d-none">
-                    <InputNumber @bind-Value="Recipe.IngredientId" />
-                    <InputNumber @bind-Value="Recipe.UserId" />
+                <div class="mb-3">
+                    <label class="fd-label">COOKING INSTRUCTIONS</label>
+                    <InputTextArea @bind-Value="Recipe.Instructions" class="form-control fd-input" rows="8" placeholder="Step 1: Preheat oven..." />
                 </div>
 
-                <div class="mt-4">
-                    <button type="submit" class="btn fd-btn-yellow w-100">CREATE RECIPE</button>
-                </div>
-            </EditForm>
+                <button type="submit" class="btn fd-btn-yellow w-100 py-3 mt-2">PUBLISH RECIPE</button>
+            </div>
         </div>
-    </div>
+    </EditForm>
 </div>
 
+@* Modal for Quick Adding Ingredients *@
+@if (showModal)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.6); z-index: 1050;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-0 shadow-lg">
+                <div class="modal-header bg-dark text-white rounded-0">
+                    <h5 class="modal-title fw-bold">NEW INGREDIENT</h5>
+                    <button type="button" class="btn-close btn-close-white" @onclick="CloseIngredientModal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="fd-label">NAME</label>
+                        <input type="text" @bind="newIng.Name" class="form-control fd-input" placeholder="e.g. Fresh Ginger" />
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary rounded-0" @onclick="CloseIngredientModal">CANCEL</button>
+                    <button type="button" class="btn fd-btn-yellow rounded-0" @onclick="QuickSaveIngredient">SAVE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 <style>
-    .fd-input {
+    :root {
+        --fd-yellow: #F5EB3B;
+        --fd-black: #222;
+    }
+
+    .fd-label {
+        font-weight: 900;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        color: black;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .fd-input, .fd-input-sm {
+        border: 2px solid var(--fd-black);
+        border-radius: 0;
+        padding: 10px;
+    }
+
+    .fd-input-sm {
+        padding: 5px;
+        font-size: 0.85rem;
+    }
+
+    .upload-box {
+        background: #f8f9fa;
+        border: 2px dashed #ccc;
+    }
+
+    .preview-img {
+        max-height: 100px;
+        border: 2px solid var(--fd-black);
+    }
+
+    .ingredient-container {
+        border: 2px solid var(--fd-black);
+        background: #fdfdfd;
+    }
+
+    .fd-btn-yellow {
+        background: var(--fd-yellow);
+        color: var(--fd-black);
+        font-weight: 900;
         border: 2px solid var(--fd-black);
         border-radius: 0;
     }
 
-        .fd-input:focus {
-            box-shadow: 4px 4px 0px var(--fd-yellow);
-            border-color: var(--fd-black);
+        .fd-btn-yellow:hover {
+            background: var(--fd-black);
+            color: white;
         }
 
-    .fd-input {
+    .fd-btn-outline-dark {
         border: 2px solid var(--fd-black);
+        font-weight: 800;
         border-radius: 0;
-        padding: 12px;
+        background: white;
     }
-
-    /* Makes the text area feel like a high-end journal */
-    textarea.fd-input {
-        line-height: 1.6;
-        background-color: #fafafa;
-    }
-
-    .fd-input:focus {
-        box-shadow: 6px 6px 0px var(--fd-yellow);
-        border-color: var(--fd-black);
-        outline: none;
-        background-color: #fff;
-    }
-
 </style>
 
 @code {
-    [SupplyParameterFromForm]
-    private Recipe Recipe { get; set; } = new();
-
-    private List<Category>? categories; // List to hold your categories
+    private Recipe Recipe { get; set; } = new() { RecipeIngredients = new List<RecipeIngredient>() };
+    private Ingredient newIng = new() { Category = "General" };
+    private List<Category>? categories;
+    private List<Ingredient>? allIngredients;
+    private bool showModal = false;
     private IBrowserFile? selectedFile;
+
+    private readonly List<string> CommonUnits = new()
+    { "Tsp", "Tbsp", "Cup", "ml", "L", "Gram", "Kg", "Pinch", "Whole", "Clove", "Can", "Packet" };
 
     protected override async Task OnInitializedAsync()
     {
-        // Fetch the categories from the database for the dropdown
-        using var context = DbFactory.CreateDbContext();
-        categories = await context.Category.OrderBy(c => c.Name).ToListAsync();
-
-        // Default values for system fields
-        Recipe.DateCreated = DateTime.Now;
-        Recipe.CreatedBy = "SystemUser"; // Replace with logged-in user logic later
+        await LoadData();
+        if (!Recipe.RecipeIngredients.Any()) AddIngredientRow();
     }
 
-    private void HandleFileSelected(InputFileChangeEventArgs e)
+    private async Task LoadData()
     {
-        selectedFile = e.File;
+        using var context = await DbFactory.CreateDbContextAsync();
+        categories = await context.Category.OrderBy(c => c.Name).ToListAsync();
+        allIngredients = await context.Ingredient.OrderBy(i => i.Name).ToListAsync();
     }
+
+    private void AddIngredientRow() => Recipe.RecipeIngredients.Add(new RecipeIngredient());
+    private void RemoveIngredient(RecipeIngredient ri) => Recipe.RecipeIngredients.Remove(ri);
+    private void ShowIngredientModal() { newIng = new Ingredient() { Category = "General" }; showModal = true; }
+    private void CloseIngredientModal() => showModal = false;
+
+    private async Task QuickSaveIngredient()
+    {
+        if (string.IsNullOrWhiteSpace(newIng.Name)) return;
+        using var context = await DbFactory.CreateDbContextAsync();
+        var existing = await context.Ingredient.FirstOrDefaultAsync(i => i.Name.ToLower() == newIng.Name.ToLower());
+        if (existing == null)
+        {
+            context.Ingredient.Add(newIng);
+            await context.SaveChangesAsync();
+        }
+        await LoadData();
+        showModal = false;
+    }
+
+    private void HandleFileSelected(InputFileChangeEventArgs e) => selectedFile = e.File;
 
     private async Task AddRecipe()
     {
-        // 1. Get the authentication state (Is someone logged in?)
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        try
         {
-            // 2. Get the unique ID (Subject/NameIdentifier) of the user
-            var userIdString = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
 
-            // 3. Convert that string ID to an int to match your Recipe model
-            if (int.TryParse(userIdString, out var userId))
+            // 1. Handle Image Upload logic from version 1
+            if (selectedFile != null)
             {
-                Recipe.UserId = userId;
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(selectedFile.Name)}";
+                var uploadsFolder = Path.Combine(Environment.WebRootPath, "uploads");
+                if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+
+                var path = Path.Combine(uploadsFolder, fileName);
+                using var stream = selectedFile.OpenReadStream(5120000);
+                using var fileStream = new FileStream(path, FileMode.Create);
+                await stream.CopyToAsync(fileStream);
+                Recipe.ImageUrl = $"/uploads/{fileName}";
             }
-        }
 
-        if (selectedFile != null)
+            using var context = await DbFactory.CreateDbContextAsync();
+
+            // 2. Set Metadata and User ID
+            Recipe.DateCreated = DateTime.Now;
+            Recipe.CreatedBy = user.Identity?.Name ?? "User";
+            var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (int.TryParse(userIdClaim, out var userId)) Recipe.UserId = userId;
+
+            // 3. Clean up empty ingredient rows before saving
+            Recipe.RecipeIngredients = Recipe.RecipeIngredients
+                .Where(ri => ri.IngredientId > 0)
+                .ToList();
+
+            context.Recipe.Add(Recipe);
+            await context.SaveChangesAsync();
+
+            NavigationManager.NavigateTo("/recipes/trending");
+        }
+        catch (Exception ex)
         {
-            var uploadDir = Path.Combine(Environment.WebRootPath, "uploads");
-            if (!Directory.Exists(uploadDir)) Directory.CreateDirectory(uploadDir);
-
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(selectedFile.Name)}";
-            var path = Path.Combine(uploadDir, fileName);
-
-            using var stream = selectedFile.OpenReadStream(5120000);
-            using var fileStream = new FileStream(path, FileMode.Create);
-            await stream.CopyToAsync(fileStream);
-
-            Recipe.ImageUrl = $"/uploads/{fileName}";
+            Console.WriteLine($"ERROR: {ex.Message}");
+            await JS.InvokeVoidAsync("alert", "Error saving recipe: " + ex.Message);
         }
-
-        using var context = DbFactory.CreateDbContext();
-        Recipe.DateCreated = DateTime.Now;
-        Recipe.CreatedBy = user.Identity?.Name ?? "Unknown";
-        context.Recipe.Add(Recipe);
-        await context.SaveChangesAsync();
-        NavigationManager.NavigateTo("/recipes/trending");
     }
 }

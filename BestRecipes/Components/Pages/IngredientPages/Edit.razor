@@ -38,11 +38,6 @@ else
                     <ValidationMessage For="() => Ingredient.DownVote" class="text-danger" />
                 </div>
                 <div class="mb-3">
-                    <label for="unitofmeasurement" class="form-label">UnitOfMeasurement:</label>
-                    <InputText id="unitofmeasurement" @bind-Value="Ingredient.UnitOfMeasurement" class="form-control" />
-                    <ValidationMessage For="() => Ingredient.UnitOfMeasurement" class="text-danger" />
-                </div>
-                <div class="mb-3">
                     <label for="datecreated" class="form-label">DateCreated:</label>
                     <InputDate id="datecreated" @bind-Value="Ingredient.DateCreated" class="form-control" />
                     <ValidationMessage For="() => Ingredient.DateCreated" class="text-danger" />
