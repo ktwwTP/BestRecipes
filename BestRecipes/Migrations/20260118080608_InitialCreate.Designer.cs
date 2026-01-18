@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BestRecipes.Migrations
 {
     [DbContext(typeof(BestRecipesContext))]
-    [Migration("20260117145332_InitialCreate")]
+    [Migration("20260118080608_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -100,7 +100,7 @@ namespace BestRecipes.Migrations
                         {
                             Id = "3781efa7-66dc-47f0-860f-e506d04102e4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a0796e1c-2b65-4589-ae38-ec985121887d",
+                            ConcurrencyStamp = "effc9282-d3cc-4c60-be8d-961e804e6686",
                             Email = "admin@localhost.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -108,9 +108,9 @@ namespace BestRecipes.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDWQ+9BeuHocSBLyUo3jkoQz/r71LuMukpcJYnlF3LxeAbzfk5+SPiO0q78H+SRBxw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBjKhQZ2YX5AvP2oyK9FstH19t4RpeCi5foesvJoAlbJDuSCNnwS8XBG6QYtgnySMA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "db7f88a0-5da8-42d0-9c7d-215913cdf74f",
+                            SecurityStamp = "697ba9fc-866c-422a-8707-3c67453d9db1",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         });
@@ -152,24 +152,24 @@ namespace BestRecipes.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5807),
-                            DateUpdated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5823),
+                            DateCreated = new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9309),
+                            DateUpdated = new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9321),
                             Description = "Start your meal with delicious appetizers.",
                             Name = "Appetizers"
                         },
                         new
                         {
                             Id = 2,
-                            DateCreated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5824),
-                            DateUpdated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5825),
+                            DateCreated = new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9322),
+                            DateUpdated = new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9323),
                             Description = "Hearty and satisfying main course recipes.",
                             Name = "Main Courses"
                         },
                         new
                         {
                             Id = 3,
-                            DateCreated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5826),
-                            DateUpdated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5826),
+                            DateCreated = new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9324),
+                            DateUpdated = new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9324),
                             Description = "Sweet treats to end your meal.",
                             Name = "Desserts"
                         });
@@ -217,8 +217,8 @@ namespace BestRecipes.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(6331),
-                            DateUpdated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(6332),
+                            DateCreated = new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9805),
+                            DateUpdated = new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9805),
                             Details = "Create the most refreshing and healthy summer salad.",
                             EndDate = new DateTime(2024, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Summer Salad Challenge",
@@ -227,8 +227,8 @@ namespace BestRecipes.Migrations
                         new
                         {
                             Id = 2,
-                            DateCreated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(6334),
-                            DateUpdated = new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(6334),
+                            DateCreated = new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9807),
+                            DateUpdated = new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9807),
                             Details = "Bake a delicious dessert perfect for the holiday season.",
                             EndDate = new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Holiday Dessert Challenge",
@@ -279,8 +279,8 @@ namespace BestRecipes.Migrations
                             Id = 1,
                             Content = "This recipe is fantastic! My family loved it.",
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6432),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6432),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9887),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9887),
                             RecipeId = 1,
                             UserId = 2
                         },
@@ -289,8 +289,8 @@ namespace BestRecipes.Migrations
                             Id = 2,
                             Content = "I found the instructions a bit confusing, but the end result was great.",
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6433),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6434),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9888),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9889),
                             RecipeId = 2,
                             UserId = 3
                         },
@@ -299,8 +299,8 @@ namespace BestRecipes.Migrations
                             Id = 3,
                             Content = "Delicious! I will definitely make this again.",
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6435),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6435),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9890),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9890),
                             RecipeId = 3,
                             UserId = 1
                         });
@@ -348,8 +348,8 @@ namespace BestRecipes.Migrations
                             Id = 1,
                             CategoryId = 0,
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6500),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6501),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9960),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9961),
                             RecipeId = 2,
                             UserId = 1
                         },
@@ -358,8 +358,8 @@ namespace BestRecipes.Migrations
                             Id = 2,
                             CategoryId = 0,
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6502),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6502),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9962),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9962),
                             RecipeId = 3,
                             UserId = 2
                         },
@@ -368,8 +368,8 @@ namespace BestRecipes.Migrations
                             Id = 3,
                             CategoryId = 0,
                             Date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6503),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6504),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9963),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9963),
                             RecipeId = 1,
                             UserId = 3
                         });
@@ -567,8 +567,8 @@ namespace BestRecipes.Migrations
                             Id = 1,
                             CategoryId = 2,
                             CookingDuration = 0,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6014),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6014),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9592),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9592),
                             Description = "Fluffy and light pancakes perfect for breakfast.",
                             Instructions = "Mix ingredients, cook on griddle, serve with syrup.",
                             IsTrending = false,
@@ -582,8 +582,8 @@ namespace BestRecipes.Migrations
                             Id = 2,
                             CategoryId = 1,
                             CookingDuration = 0,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6016),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6016),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9593),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9594),
                             Description = "Crisp romaine lettuce with creamy Caesar dressing.",
                             Instructions = "Toss lettuce with dressing, add croutons and cheese.",
                             IsTrending = false,
@@ -597,8 +597,8 @@ namespace BestRecipes.Migrations
                             Id = 3,
                             CategoryId = 3,
                             CookingDuration = 0,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6017),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6018),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9595),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9595),
                             Description = "Chewy cookies loaded with chocolate chips.",
                             Instructions = "Mix dough, fold in chocolate chips, bake until golden.",
                             IsTrending = false,
@@ -652,8 +652,8 @@ namespace BestRecipes.Migrations
                         {
                             RecipeId = 1,
                             IngredientId = 1,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6096),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6096),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9665),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9665),
                             Id = 0,
                             Notes = "sifted",
                             Quantity = 200m
@@ -662,8 +662,8 @@ namespace BestRecipes.Migrations
                         {
                             RecipeId = 1,
                             IngredientId = 2,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6098),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6098),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9666),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9667),
                             Id = 0,
                             Notes = "",
                             Quantity = 30m
@@ -672,8 +672,8 @@ namespace BestRecipes.Migrations
                         {
                             RecipeId = 1,
                             IngredientId = 5,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6099),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6099),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9668),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9668),
                             Id = 0,
                             Notes = "room temperature",
                             Quantity = 250m
@@ -682,8 +682,8 @@ namespace BestRecipes.Migrations
                         {
                             RecipeId = 1,
                             IngredientId = 4,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6101),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6101),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9669),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9670),
                             Id = 0,
                             Notes = "melted",
                             Quantity = 50m
@@ -692,8 +692,8 @@ namespace BestRecipes.Migrations
                         {
                             RecipeId = 1,
                             IngredientId = 8,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6102),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6103),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9671),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9672),
                             Id = 0,
                             Notes = "pinch",
                             Quantity = 1m
@@ -702,8 +702,8 @@ namespace BestRecipes.Migrations
                         {
                             RecipeId = 2,
                             IngredientId = 7,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6105),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6105),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9674),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9674),
                             Id = 0,
                             Notes = "finely chopped",
                             Quantity = 0.25m
@@ -712,8 +712,8 @@ namespace BestRecipes.Migrations
                         {
                             RecipeId = 2,
                             IngredientId = 3,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6106),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6107),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9675),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9675),
                             Id = 0,
                             Notes = "for dressing",
                             Quantity = 50m
@@ -722,8 +722,8 @@ namespace BestRecipes.Migrations
                         {
                             RecipeId = 2,
                             IngredientId = 8,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6108),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6108),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9676),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9677),
                             Id = 0,
                             Notes = "to taste",
                             Quantity = 1m
@@ -732,8 +732,8 @@ namespace BestRecipes.Migrations
                         {
                             RecipeId = 2,
                             IngredientId = 9,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6109),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6109),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9678),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9678),
                             Id = 0,
                             Notes = "freshly ground",
                             Quantity = 1m
@@ -742,8 +742,8 @@ namespace BestRecipes.Migrations
                         {
                             RecipeId = 3,
                             IngredientId = 1,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6110),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6111),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9679),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9679),
                             Id = 0,
                             Notes = "sifted",
                             Quantity = 180m
@@ -752,8 +752,8 @@ namespace BestRecipes.Migrations
                         {
                             RecipeId = 3,
                             IngredientId = 2,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6112),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6112),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9680),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9681),
                             Id = 0,
                             Notes = "",
                             Quantity = 100m
@@ -762,8 +762,8 @@ namespace BestRecipes.Migrations
                         {
                             RecipeId = 3,
                             IngredientId = 4,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6113),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6113),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9682),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9682),
                             Id = 0,
                             Notes = "softened",
                             Quantity = 100m
@@ -772,8 +772,8 @@ namespace BestRecipes.Migrations
                         {
                             RecipeId = 3,
                             IngredientId = 8,
-                            DateCreated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6114),
-                            DateUpdated = new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6115),
+                            DateCreated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9683),
+                            DateUpdated = new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9683),
                             Id = 0,
                             Notes = "to balance sweetness",
                             Quantity = 0.5m

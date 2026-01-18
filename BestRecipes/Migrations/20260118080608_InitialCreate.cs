@@ -328,16 +328,16 @@ namespace BestRecipes.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "3781efa7-66dc-47f0-860f-e506d04102e4", 0, "a0796e1c-2b65-4589-ae38-ec985121887d", "admin@localhost.com", true, "Admin", "User", false, null, "ADMIN@LOCALHOST.COM", "ADMIN@LOCALHOST.COM", "AQAAAAIAAYagAAAAEDWQ+9BeuHocSBLyUo3jkoQz/r71LuMukpcJYnlF3LxeAbzfk5+SPiO0q78H+SRBxw==", null, false, "db7f88a0-5da8-42d0-9c7d-215913cdf74f", false, "admin@localhost.com" });
+                values: new object[] { "3781efa7-66dc-47f0-860f-e506d04102e4", 0, "effc9282-d3cc-4c60-be8d-961e804e6686", "admin@localhost.com", true, "Admin", "User", false, null, "ADMIN@LOCALHOST.COM", "ADMIN@LOCALHOST.COM", "AQAAAAIAAYagAAAAEBjKhQZ2YX5AvP2oyK9FstH19t4RpeCi5foesvJoAlbJDuSCNnwS8XBG6QYtgnySMA==", null, false, "697ba9fc-866c-422a-8707-3c67453d9db1", false, "admin@localhost.com" });
 
             migrationBuilder.InsertData(
                 table: "Category",
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "Description", "Name", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, null, new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5807), new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5823), "Start your meal with delicious appetizers.", "Appetizers", null },
-                    { 2, null, new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5824), new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5825), "Hearty and satisfying main course recipes.", "Main Courses", null },
-                    { 3, null, new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5826), new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(5826), "Sweet treats to end your meal.", "Desserts", null }
+                    { 1, null, new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9309), new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9321), "Start your meal with delicious appetizers.", "Appetizers", null },
+                    { 2, null, new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9322), new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9323), "Hearty and satisfying main course recipes.", "Main Courses", null },
+                    { 3, null, new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9324), new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9324), "Sweet treats to end your meal.", "Desserts", null }
                 });
 
             migrationBuilder.InsertData(
@@ -345,8 +345,8 @@ namespace BestRecipes.Migrations
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "Details", "EndDate", "Name", "StartDate", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, null, new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(6331), new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(6332), "Create the most refreshing and healthy summer salad.", new DateTime(2024, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Summer Salad Challenge", new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
-                    { 2, null, new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(6334), new DateTime(2026, 1, 17, 22, 53, 31, 922, DateTimeKind.Local).AddTicks(6334), "Bake a delicious dessert perfect for the holiday season.", new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), "Holiday Dessert Challenge", new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null }
+                    { 1, null, new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9805), new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9805), "Create the most refreshing and healthy summer salad.", new DateTime(2024, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Summer Salad Challenge", new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null },
+                    { 2, null, new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9807), new DateTime(2026, 1, 18, 16, 6, 8, 198, DateTimeKind.Local).AddTicks(9807), "Bake a delicious dessert perfect for the holiday season.", new DateTime(2024, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), "Holiday Dessert Challenge", new DateTime(2024, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null }
                 });
 
             migrationBuilder.InsertData(
@@ -354,9 +354,9 @@ namespace BestRecipes.Migrations
                 columns: new[] { "Id", "Content", "CreatedBy", "Date", "DateCreated", "DateUpdated", "RecipeId", "UpdatedBy", "UserId" },
                 values: new object[,]
                 {
-                    { 1, "This recipe is fantastic! My family loved it.", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6432), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6432), 1, null, 2 },
-                    { 2, "I found the instructions a bit confusing, but the end result was great.", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6433), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6434), 2, null, 3 },
-                    { 3, "Delicious! I will definitely make this again.", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6435), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6435), 3, null, 1 }
+                    { 1, "This recipe is fantastic! My family loved it.", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9887), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9887), 1, null, 2 },
+                    { 2, "I found the instructions a bit confusing, but the end result was great.", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9888), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9889), 2, null, 3 },
+                    { 3, "Delicious! I will definitely make this again.", null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9890), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9890), 3, null, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -364,9 +364,9 @@ namespace BestRecipes.Migrations
                 columns: new[] { "Id", "CategoryId", "CreatedBy", "Date", "DateCreated", "DateUpdated", "RecipeId", "UpdatedBy", "UserId" },
                 values: new object[,]
                 {
-                    { 1, 0, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6500), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6501), 2, null, 1 },
-                    { 2, 0, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6502), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6502), 3, null, 2 },
-                    { 3, 0, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6503), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6504), 1, null, 3 }
+                    { 1, 0, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9960), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9961), 2, null, 1 },
+                    { 2, 0, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9962), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9962), 3, null, 2 },
+                    { 3, 0, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9963), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9963), 1, null, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -390,9 +390,9 @@ namespace BestRecipes.Migrations
                 columns: new[] { "Id", "CategoryId", "CookingDuration", "CreatedBy", "DateCreated", "DateUpdated", "Description", "ImageUrl", "Instructions", "IsTrending", "PreparationTime", "ServingSize", "Title", "UpdatedBy", "UserId" },
                 values: new object[,]
                 {
-                    { 1, 2, 0, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6014), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6014), "Fluffy and light pancakes perfect for breakfast.", null, "Mix ingredients, cook on griddle, serve with syrup.", false, 0, 0, "Classic Pancakes", null, 0 },
-                    { 2, 1, 0, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6016), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6016), "Crisp romaine lettuce with creamy Caesar dressing.", null, "Toss lettuce with dressing, add croutons and cheese.", false, 0, 0, "Caesar Salad", null, 0 },
-                    { 3, 3, 0, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6017), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6018), "Chewy cookies loaded with chocolate chips.", null, "Mix dough, fold in chocolate chips, bake until golden.", false, 0, 0, "Chocolate Chip Cookies", null, 0 }
+                    { 1, 2, 0, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9592), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9592), "Fluffy and light pancakes perfect for breakfast.", null, "Mix ingredients, cook on griddle, serve with syrup.", false, 0, 0, "Classic Pancakes", null, 0 },
+                    { 2, 1, 0, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9593), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9594), "Crisp romaine lettuce with creamy Caesar dressing.", null, "Toss lettuce with dressing, add croutons and cheese.", false, 0, 0, "Caesar Salad", null, 0 },
+                    { 3, 3, 0, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9595), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9595), "Chewy cookies loaded with chocolate chips.", null, "Mix dough, fold in chocolate chips, bake until golden.", false, 0, 0, "Chocolate Chip Cookies", null, 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -405,19 +405,19 @@ namespace BestRecipes.Migrations
                 columns: new[] { "IngredientId", "RecipeId", "CreatedBy", "DateCreated", "DateUpdated", "Id", "Notes", "Quantity", "Unit", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { 1, 1, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6096), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6096), 0, "sifted", 200m, null, null },
-                    { 2, 1, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6098), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6098), 0, "", 30m, null, null },
-                    { 4, 1, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6101), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6101), 0, "melted", 50m, null, null },
-                    { 5, 1, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6099), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6099), 0, "room temperature", 250m, null, null },
-                    { 8, 1, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6102), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6103), 0, "pinch", 1m, null, null },
-                    { 3, 2, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6106), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6107), 0, "for dressing", 50m, null, null },
-                    { 7, 2, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6105), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6105), 0, "finely chopped", 0.25m, null, null },
-                    { 8, 2, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6108), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6108), 0, "to taste", 1m, null, null },
-                    { 9, 2, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6109), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6109), 0, "freshly ground", 1m, null, null },
-                    { 1, 3, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6110), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6111), 0, "sifted", 180m, null, null },
-                    { 2, 3, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6112), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6112), 0, "", 100m, null, null },
-                    { 4, 3, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6113), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6113), 0, "softened", 100m, null, null },
-                    { 8, 3, null, new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6114), new DateTime(2026, 1, 17, 14, 53, 31, 922, DateTimeKind.Utc).AddTicks(6115), 0, "to balance sweetness", 0.5m, null, null }
+                    { 1, 1, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9665), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9665), 0, "sifted", 200m, null, null },
+                    { 2, 1, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9666), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9667), 0, "", 30m, null, null },
+                    { 4, 1, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9669), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9670), 0, "melted", 50m, null, null },
+                    { 5, 1, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9668), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9668), 0, "room temperature", 250m, null, null },
+                    { 8, 1, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9671), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9672), 0, "pinch", 1m, null, null },
+                    { 3, 2, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9675), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9675), 0, "for dressing", 50m, null, null },
+                    { 7, 2, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9674), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9674), 0, "finely chopped", 0.25m, null, null },
+                    { 8, 2, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9676), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9677), 0, "to taste", 1m, null, null },
+                    { 9, 2, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9678), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9678), 0, "freshly ground", 1m, null, null },
+                    { 1, 3, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9679), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9679), 0, "sifted", 180m, null, null },
+                    { 2, 3, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9680), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9681), 0, "", 100m, null, null },
+                    { 4, 3, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9682), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9682), 0, "softened", 100m, null, null },
+                    { 8, 3, null, new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9683), new DateTime(2026, 1, 18, 8, 6, 8, 198, DateTimeKind.Utc).AddTicks(9683), 0, "to balance sweetness", 0.5m, null, null }
                 });
 
             migrationBuilder.CreateIndex(

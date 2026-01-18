@@ -27,7 +27,9 @@
                         <div class="recipe-image-wrapper">
                             @* Uses ImageUrl if it exists, otherwise a placeholder *@
                             @* Change recipe.ImageUrl to item.Recipe.ImageUrl *@
-                            <img src="@(string.IsNullOrEmpty(item.Recipe.ImageUrl) ? "https://picsum.photos/400/300?random=" + item.Recipe.Id : item.Recipe.ImageUrl)"
+                            <img src="@(string.IsNullOrEmpty(item.Recipe.ImageUrl)
+                                            ? "https://placehold.jp/24/cccccc/ffffff/400x300.png?text=No%20Image"
+                                            : item.Recipe.ImageUrl)"
                                  alt="@item.Recipe.Title" class="recipe-img" />
 
                             @* Display the popularity badge *@
