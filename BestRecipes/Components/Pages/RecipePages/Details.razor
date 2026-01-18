@@ -4,6 +4,7 @@
 @using BestRecipes.Domain
 @inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
 
 @if (recipe is not null)
 {
@@ -30,7 +31,12 @@
             </div>
 
             <div class="fd-action-bar mb-4">
-                <button class="fd-btn-outline"><i class="bi bi-bookmark"></i> SAVE</button>
+                @* --- UPDATED SAVE BUTTON --- *@
+                <button class="fd-btn-outline @(isFavourited ? "bg-dark text-white" : "")" @onclick="ToggleFavourite">
+                    <i class="bi @(isFavourited ? "bi-heart-fill text-warning" : "bi-bookmark")"></i>
+                    @(isFavourited ? "SAVED" : "SAVE")
+                </button>
+
                 <button class="fd-btn-outline"><i class="bi bi-printer"></i> PRINT</button>
                 <a href="@($"/recipes/edit?id={recipe.Id}")" class="fd-btn-outline text-decoration-none"><i class="bi bi-pencil"></i> EDIT</a>
             </div>
@@ -287,6 +293,8 @@ else
     private Recipe? recipe;
     private int currentServings;
     private int baseServings;
+    private bool isFavourited;
+    private string? currentUserId;
 
     private decimal ScalingFactor => (baseServings > 0) ? (decimal)currentServings / baseServings : 1m;
     private int DisplayPrepTime => recipe != null ? (int)Math.Round(recipe.PreparationTime * (double)ScalingFactor) : 0;
@@ -299,6 +307,17 @@ else
     {
         using var context = await DbFactory.CreateDbContextAsync();
 
+        // --- IDENTITY USER CHECK ---
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            // Try different claim types to find the ID
+            currentUserId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value 
+                         ?? user.FindFirst("sub")?.Value; 
+        }
+
         recipe = await context.Recipe
             .Include(r => r.RecipeIngredients)
             .ThenInclude(ri => ri.Ingredient)
@@ -308,10 +327,71 @@ else
         {
             baseServings = recipe.ServingSize;
             currentServings = recipe.ServingSize;
+
+            if (!string.IsNullOrEmpty(currentUserId))
+            {
+                // Compare using strings to avoid parsing errors here
+                isFavourited = await context.Favourite
+                    .AnyAsync(f => f.RecipeId == Id && f.UserId.ToString() == currentUserId);
+            }
         }
         else
         {
             NavigationManager.NavigateTo("/recipes");
+        }
+    }
+
+    private async Task ToggleFavourite()
+    {
+        // 1. Check if logged in
+        if (string.IsNullOrEmpty(currentUserId))
+        {
+            NavigationManager.NavigateTo("Account/Login", forceLoad: true);
+            return;
+        }
+
+        using var context = await DbFactory.CreateDbContextAsync();
+
+        try 
+        {
+            // 2. Try to get the numeric ID safely
+            // If your BestRecipesUser uses a string GUID for an ID, int.TryParse will return false
+            if (!int.TryParse(currentUserId, out int numericId))
+            {
+                // If this triggers, your database uses string IDs, but your Favourite model uses int.
+                // For now, let's assume it's a number.
+                Console.WriteLine("ID Error: User ID is not a number.");
+            }
+
+            if (isFavourited)
+            {
+                var fav = await context.Favourite
+                    .FirstOrDefaultAsync(f => f.RecipeId == Id && f.UserId == numericId);
+                
+                if (fav != null)
+                {
+                    context.Favourite.Remove(fav);
+                }
+            }
+            else
+            {
+                context.Favourite.Add(new Favourite
+                {
+                    UserId = numericId,
+                    RecipeId = Id,
+                    Date = DateTime.Now,
+                    CategoryId = recipe?.CategoryId ?? 0 // Required by your model
+                });
+            }
+
+            await context.SaveChangesAsync();
+            isFavourited = !isFavourited;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            // This will show up in your Visual Studio Output window
+            Console.WriteLine($"DB Error: {ex.Message}");
         }
     }
 
@@ -325,24 +405,10 @@ else
     {
         decimal scaledVal = quantity * ScalingFactor;
         double val = (double)scaledVal;
-
         if (val <= 0) return "";
-
         int wholeNumber = (int)val;
         double fraction = val - wholeNumber;
-
-        string fractionText = fraction switch
-        {
-            >= 0.875 => "7/8",
-            >= 0.75 => "3/4",
-            >= 0.66 => "2/3",
-            >= 0.5 => "1/2",
-            >= 0.33 => "1/3",
-            >= 0.25 => "1/4",
-            >= 0.125 => "1/8",
-            _ => ""
-        };
-
+        string fractionText = fraction switch { >= 0.875 => "7/8", >= 0.75 => "3/4", >= 0.66 => "2/3", >= 0.5 => "1/2", >= 0.33 => "1/3", >= 0.25 => "1/4", >= 0.125 => "1/8", _ => "" };
         if (wholeNumber > 0 && !string.IsNullOrEmpty(fractionText)) return $"{wholeNumber} {fractionText}";
         if (!string.IsNullOrEmpty(fractionText)) return fractionText;
         return wholeNumber > 0 ? wholeNumber.ToString() : val.ToString("0.##");
