@@ -1,79 +1,193 @@
 ﻿@page "/challenges/create"
 @using Microsoft.EntityFrameworkCore
 @using BestRecipes.Domain
+@using Microsoft.AspNetCore.Components.Authorization
 @inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
+@rendermode InteractiveServer
 
-<PageTitle>Create</PageTitle>
+<PageTitle>Create Challenge</PageTitle>
 
-<h1>Create</h1>
-
-<h2>Challenge</h2>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <EditForm method="post" Model="Challenge" OnValidSubmit="AddChallenge" FormName="create" Enhance>
-            <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert"/>
-            <div class="mb-3">
-                <label for="name" class="form-label">Name:</label> 
-                <InputText id="name" @bind-Value="Challenge.Name" class="form-control" /> 
-                <ValidationMessage For="() => Challenge.Name" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="details" class="form-label">Details:</label> 
-                <InputText id="details" @bind-Value="Challenge.Details" class="form-control" /> 
-                <ValidationMessage For="() => Challenge.Details" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="startdate" class="form-label">StartDate:</label> 
-                <InputDate id="startdate" @bind-Value="Challenge.StartDate" class="form-control" /> 
-                <ValidationMessage For="() => Challenge.StartDate" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="enddate" class="form-label">EndDate:</label> 
-                <InputDate id="enddate" @bind-Value="Challenge.EndDate" class="form-control" /> 
-                <ValidationMessage For="() => Challenge.EndDate" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="datecreated" class="form-label">DateCreated:</label> 
-                <InputDate id="datecreated" @bind-Value="Challenge.DateCreated" class="form-control" /> 
-                <ValidationMessage For="() => Challenge.DateCreated" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="dateupdated" class="form-label">DateUpdated:</label> 
-                <InputDate id="dateupdated" @bind-Value="Challenge.DateUpdated" class="form-control" /> 
-                <ValidationMessage For="() => Challenge.DateUpdated" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="createdby" class="form-label">CreatedBy:</label> 
-                <InputText id="createdby" @bind-Value="Challenge.CreatedBy" class="form-control" /> 
-                <ValidationMessage For="() => Challenge.CreatedBy" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="updatedby" class="form-label">UpdatedBy:</label> 
-                <InputText id="updatedby" @bind-Value="Challenge.UpdatedBy" class="form-control" /> 
-                <ValidationMessage For="() => Challenge.UpdatedBy" class="text-danger" /> 
-            </div>        
-            <button type="submit" class="btn btn-primary">Create</button>
-        </EditForm>
+@* --- HERO SECTION --- *@
+<div class="create-hero">
+    <div class="container">
+        <nav class="fd-breadcrumb">HOME / CHALLENGES / CREATE</nav>
+        <h1 class="fd-page-title">START A NEW CHALLENGE</h1>
     </div>
 </div>
 
-<div>
-    <a href="/challenges">Back to List</a>
+<div class="container mt-5 mb-5">
+    <EditForm Model="Challenge" OnValidSubmit="AddChallenge" FormName="createChallenge">
+        <DataAnnotationsValidator />
+
+        <div class="row g-5">
+            @* --- LEFT COLUMN: MAIN DETAILS --- *@
+            <div class="col-lg-8">
+                <div class="fd-form-section shadow-sm">
+                    <h3 class="fd-section-header">CHALLENGE INFO</h3>
+
+                    <div class="mb-4">
+                        <label class="fd-label">CHALLENGE NAME</label>
+                        <InputText @bind-Value="Challenge.Name" class="form-control fd-input" placeholder="e.g. The Great Burger Off" />
+                        <ValidationMessage For="() => Challenge.Name" class="text-danger" />
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="fd-label">DETAILS & RULES</label>
+                        <InputTextArea @bind-Value="Challenge.Details" class="form-control fd-input" rows="6" placeholder="Explain the rules, prizes, and goals..." />
+                        <ValidationMessage For="() => Challenge.Details" class="text-danger" />
+                    </div>
+                </div>
+            </div>
+
+            @* --- RIGHT COLUMN: TIMELINE --- *@
+            <div class="col-lg-4">
+                <div class="fd-sidebar-box shadow-sm">
+                    <h4 class="fd-label mb-3 text-center">TIMELINE</h4>
+
+                    <div class="mb-3">
+                        <label class="small fw-bold">START DATE</label>
+                        <InputDate @bind-Value="Challenge.StartDate" class="form-control" />
+                        <ValidationMessage For="() => Challenge.StartDate" class="text-danger" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="small fw-bold">END DATE</label>
+                        <InputDate @bind-Value="Challenge.EndDate" class="form-control" />
+                        <ValidationMessage For="() => Challenge.EndDate" class="text-danger" />
+                    </div>
+
+                    <div class="alert alert-light border mt-3 small text-muted">
+                        <i class="bi bi-info-circle-fill me-1"></i>
+                        The <strong>Date Created</strong> and <strong>Creator</strong> fields will be set automatically upon submission.
+                    </div>
+
+                    <hr />
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="fd-btn-save">CREATE CHALLENGE</button>
+                        <a href="/challenges" class="btn btn-outline-secondary btn-sm">CANCEL</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </EditForm>
 </div>
+
+<style>
+    /* Consistent Styling */
+    .create-hero {
+        background: #f8f9fa;
+        padding: 40px 0;
+        border-bottom: 4px solid var(--fd-black);
+    }
+
+    .fd-form-section, .fd-sidebar-box {
+        background: white;
+        padding: 25px;
+        border: 1px solid #eee;
+    }
+
+    .fd-section-header {
+        font-weight: 900;
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+    }
+
+    .fd-label {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 0.75rem;
+        letter-spacing: 1.5px;
+        color: var(--fd-grey);
+        display: block;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+
+    .fd-page-title {
+        font-family: 'Arial Black', Gadget, sans-serif;
+        font-weight: 900;
+        letter-spacing: -2px;
+        font-size: 3rem;
+        margin: 0;
+        color: var(--fd-black);
+    }
+
+    .fd-breadcrumb {
+        font-size: 0.8rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+        color: #777;
+        margin-bottom: 10px;
+    }
+
+    .fd-input {
+        border: 2px solid #eee;
+        border-radius: 0;
+        padding: 12px;
+        font-weight: 500;
+    }
+
+        .fd-input:focus {
+            border-color: var(--fd-yellow);
+            box-shadow: none;
+        }
+
+    .fd-btn-save {
+        background: var(--fd-black);
+        color: white;
+        border: none;
+        padding: 12px;
+        font-weight: 900;
+        letter-spacing: 1px;
+        transition: 0.3s;
+        text-transform: uppercase;
+    }
+
+        .fd-btn-save:hover {
+            background: #444; /* Darker grey on hover */
+            transform: translateY(-2px);
+        }
+
+    :root {
+        --fd-yellow: #F5EB3B;
+        --fd-black: #222222;
+        --fd-grey: #757575;
+    }
+</style>
 
 @code {
     [SupplyParameterFromForm]
-    private Challenge Challenge { get; set; } = new();
+    private Challenge Challenge { get; set; } = new()
+    {
+        // Set default dates so inputs aren't empty
+        StartDate = DateTime.Now,
+        EndDate = DateTime.Now.AddDays(7)
+    };
 
-    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task AddChallenge()
     {
         using var context = DbFactory.CreateDbContext();
+
+        // 1. AUTO-FILL SYSTEM FIELDS
+        // Instead of asking the user, we set these automatically
+        Challenge.DateCreated = DateTime.Now;
+        Challenge.DateUpdated = DateTime.Now;
+
+        // Get the current logged-in user (or default to "Guest")
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var userName = authState.User.Identity?.Name ?? "Guest";
+
+        Challenge.CreatedBy = userName;
+        Challenge.UpdatedBy = userName;
+
+        // 2. SAVE TO DB
         context.Challenge.Add(Challenge);
         await context.SaveChangesAsync();
+
         NavigationManager.NavigateTo("/challenges");
     }
 }

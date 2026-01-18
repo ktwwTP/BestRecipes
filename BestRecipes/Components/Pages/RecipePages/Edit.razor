@@ -1,6 +1,7 @@
 ﻿@page "/recipes/edit"
 @using Microsoft.EntityFrameworkCore
 @using BestRecipes.Domain
+@using Microsoft.AspNetCore.Components.Authorization
 @inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
@@ -89,8 +90,22 @@ else
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="fd-btn-save">PUBLISH CHANGES</button>
-                            <a href="/recipes/details?id=@Recipe.Id" class="btn btn-outline-secondary btn-sm">CANCEL & VIEW</a>
+                            <a href="/recipes/details?id=@Recipe.Id" class="btn btn-outline-secondary btn-sm rounded-0 fw-bold">CANCEL & VIEW</a>
                         </div>
+
+                        @* --- ADMIN ONLY DELETE BUTTON --- *@
+                        <AuthorizeView Roles="Administrator">
+                            @* renaming context to avoid conflict with EditForm *@
+                            <Authorized Context="authContext">
+                                <hr class="mt-4 mb-3" />
+                                <div class="d-grid">
+                                    <a href="/recipes/delete?id=@Recipe.Id" class="btn btn-danger btn-sm rounded-0 fw-bold">
+                                        <i class="bi bi-trash-fill me-1"></i> DELETE RECIPE
+                                    </a>
+                                </div>
+                            </Authorized>
+                        </AuthorizeView>
+
                     </div>
 
                     @* PREVIEW IMAGE *@
