@@ -13,6 +13,7 @@
 
         public int UserId { get; set; }
         public int CategoryId { get; set; }
+        public virtual Category? Category { get; set; }
 
         // Initialized as a new list
         public ICollection<RecipeIngredient> RecipeIngredients { get; set; } = new List<RecipeIngredient>();
