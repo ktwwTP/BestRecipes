@@ -1,9 +1,8 @@
 ﻿@page "/recipes/trending"
 @using BestRecipes.Domain
 @using Microsoft.EntityFrameworkCore
-@inject BestRecipes.Data.BestRecipesContext DbContext
+@inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
 @inject NavigationManager Navigation
-@* This line is required for buttons and interactions to work *@
 @rendermode InteractiveServer
 
 <PageTitle>Trending Recipes | BestRecipes</PageTitle>
@@ -24,22 +23,26 @@
             <p class="mt-2 fw-bold">CALCULATING TRENDS...</p>
         </div>
     }
+    else if (!trendingRecipes.Any())
+    {
+        <div class="text-center py-5">
+            <h3 class="fw-black">NO TRENDING RECIPES YET</h3>
+            <p class="text-muted">Recipes will appear here once they receive their first favorite!</p>
+            <a href="/recipes" class="btn btn-dark fw-bold mt-2">BROWSE ALL RECIPES</a>
+        </div>
+    }
     else
     {
         <div class="row g-4">
             @foreach (var item in trendingRecipes)
             {
                 <div class="col-md-6 col-lg-3">
-                    @* Added @onclick to the whole card for better UX *@
                     <div class="card h-100 fd-recipe-card shadow-sm border-2 border-dark"
                          style="cursor: pointer;"
                          @onclick="() => NavigateToRecipe(item.Recipe.Id)">
 
-                        @* Image Wrapper *@
                         <div class="fd-card-img-container">
-                            <img src="@(string.IsNullOrEmpty(item.Recipe.ImageUrl)
-                                                                          ? "/images/placeholder.jpg"
-                                                                          : item.Recipe.ImageUrl)"
+                            <img src="@(string.IsNullOrEmpty(item.Recipe.ImageUrl) ? "/images/placeholder.jpg" : item.Recipe.ImageUrl)"
                                  alt="@item.Recipe.Title" class="card-img-top fd-card-img" />
 
                             <div class="fd-category-badge">
@@ -47,26 +50,19 @@
                             </div>
                         </div>
 
-                        @* Card Content *@
                         <div class="card-body d-flex flex-column p-3">
                             <h5 class="card-title fw-black mb-2" style="font-size: 1.1rem;">@item.Recipe.Title.ToUpper()</h5>
-
-                            <p class="card-text text-muted flex-grow-1 small" style="line-height: 1.4;">
+                            <p class="card-text text-muted flex-grow-1 small">
                                 @(item.Recipe.Description?.Length > 70 ? item.Recipe.Description.Substring(0, 67) + "..." : item.Recipe.Description)
                             </p>
 
-                            @* Footer with Time and Link *@
                             <div class="d-flex justify-content-between align-items-center mt-3 border-top border-dark pt-3">
                                 <div class="small fw-black">
                                     <i class="bi bi-clock me-1"></i> @(item.Recipe.PreparationTime) MINS
                                 </div>
-                                @* Using a direct <a> tag is often more reliable for navigation *@
-                                <a href="/recipes/details?id=@item.Recipe.Id"
-                                   class="btn btn-dark btn-sm fw-black px-3"
-                                   style="border-radius: 0; font-size: 0.75rem;"
-                                   @onclick:stopPropagation>
+                                <button class="btn btn-dark btn-sm fw-black px-3" style="border-radius: 0; font-size: 0.75rem;">
                                     VIEW RECIPE
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -81,15 +77,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Fetching the most popular recipes based on Favourites table
-        trendingRecipes = await DbContext.Recipe
+        using var context = await DbFactory.CreateDbContextAsync();
+
+        // The key logic: Count rows in Favourite table for each Recipe
+        trendingRecipes = await context.Recipe
             .Select(r => new RecipeCountDto
             {
                 Recipe = r,
-                FavCount = DbContext.Favourite.Count(f => f.RecipeId == r.Id)
+                FavCount = context.Favourite.Count(f => f.RecipeId == r.Id)
             })
+            // TESTING RULE: Only show if it has at least 1 favorite
+            .Where(x => x.FavCount > 0)
             .OrderByDescending(x => x.FavCount)
-            .ThenByDescending(x => x.Recipe.Id)
             .Take(12)
             .ToListAsync();
     }
