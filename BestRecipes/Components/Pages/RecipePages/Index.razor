@@ -1,285 +1,199 @@
 ﻿@page "/recipes"
 @using Microsoft.EntityFrameworkCore
-@using Microsoft.AspNetCore.Components.QuickGrid
-@using Microsoft.AspNetCore.Authorization
 @using BestRecipes.Domain
 @using BestRecipes.Data
-@implements IAsyncDisposable
-@inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
-@inject NavigationManager NavigationManager
+@inject IDbContextFactory<BestRecipesContext> DbFactory
 @rendermode InteractiveServer
 
-<PageTitle>Recipes | Food.com Style</PageTitle>
+<PageTitle>Home | BestRecipes</PageTitle>
 
-@* ... (Your Header and Search Sections remain exactly the same) ... *@
-<div class="recipes-page-header">
-    <div class="container">
-        <div class="fd-breadcrumb">HOME / RECIPES</div>
-        @if (!string.IsNullOrWhiteSpace(SearchTerm))
+<div class="container mt-5">
+    @* --- HEADER SECTION --- *@
+    <div class="text-center mb-4">
+        <div class="small fw-bold text-muted mb-2">HOME / RECIPES</div>
+        <h1 class="display-4 fw-black m-0">POPULAR RECIPES</h1>
+        <p class="text-muted">The community's most-loved dishes, all in one place.</p>
+    </div>
+
+    @* --- SEARCH & FILTER BAR --- *@
+    <div class="row g-0 mb-5 align-items-stretch shadow-sm border border-dark">
+        <div class="col-md-5 d-flex align-items-center bg-light border-end border-dark p-2">
+            <i class="bi bi-search ms-2 me-2 text-muted"></i>
+            <input type="text" class="form-control border-0 bg-transparent"
+                   placeholder="What would you like to make?"
+                   value="@SearchTerm"
+                   @oninput="OnSearchInput" />
+        </div>
+        <div class="col-md-3 border-end border-dark">
+            <select class="form-select border-0 h-100 fw-bold text-uppercase" @onchange="OnCategoryChange" style="border-radius:0;">
+                <option value="0">All Categories</option>
+                @if (categories != null)
+                {
+                    @foreach (var cat in categories)
+                    {
+                        <option value="@cat.Id">@cat.Name.ToUpper()</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <a href="recipes/create" class="btn btn-warning w-100 h-100 d-flex align-items-center justify-content-center fw-black border-0" style="border-radius:0; background-color: #F5EB3B;">
+                + ADD A RECIPE
+            </a>
+        </div>
+    </div>
+
+    @* --- GRID SECTION (RESTORING THE CARDS) --- *@
+    <div class="row g-4">
+        @if (filteredRecipes == null)
         {
-            <h1 class="fd-title">RESULTS FOR "@SearchTerm.ToUpper()"</h1>
-            <p class="fd-subtitle">
-                <a href="/recipes" class="text-decoration-none text-muted">CLEAR SEARCH</a>
-            </p>
+            <div class="text-center py-5"><div class="spinner-border text-warning"></div></div>
+        }
+        else if (!filteredRecipes.Any())
+        {
+            <div class="text-center py-5">
+                <h3 class="fw-black">NO RECIPES FOUND</h3>
+                <p class="text-muted">Try adjusting your search or category filter.</p>
+                <button class="btn btn-dark fw-bold mt-2" @onclick="ResetFilters">CLEAR FILTERS</button>
+            </div>
         }
         else
         {
-            <h1 class="fd-title">POPULAR RECIPES</h1>
-            <p class="fd-subtitle">The community's most-loved dishes, all in one place.</p>
-        }
-    </div>
-</div>
+            @foreach (var recipe in filteredRecipes)
+            {
+                <div class="col-md-6 col-lg-4">
+                    @* --- FULL CARD START --- *@
+                    <div class="card h-100 fd-recipe-card shadow-sm border-2 border-dark">
 
-<div class="search-filter-section sticky-top shadow-sm">
-    <div class="container">
-        <div class="row g-3 align-items-center">
-            <div class="col-lg-6">
-                <div class="search-box-large position-relative">
-                    <span class="bi bi-search search-icon position-absolute" style="left: 15px; top: 15px;"></span>
-                    <input type="search" @bind="SearchTerm" @bind:event="oninput" class="form-control fd-input ps-5" placeholder="What would you like to make?" autofocus />
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <select @bind="selectedCategory" class="form-select fd-select">
-                    <option value="0">ALL CATEGORIES</option>
-                    @foreach (var category in categories)
-                    {
-                        <option value="@category.Id">@category.Name.ToUpper()</option>
-                    }
-                </select>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <a href="recipes/create" class="btn fd-btn-primary w-100 text-decoration-none">
-                    <span class="bi bi-plus-lg"></span> ADD A RECIPE
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-@* ... (End of Header/Search Sections) ... *@
+                        @* Image Container *@
+                        <div class="fd-card-img-container">
+                            <img src="@(string.IsNullOrEmpty(recipe.ImageUrl) ? "/images/placeholder.jpg" : recipe.ImageUrl)"
+                                 class="card-img-top fd-card-img" alt="@recipe.Title">
+                            <div class="fd-category-badge">@(recipe.Category?.Name?.ToUpper() ?? "RECIPE")</div>
+                        </div>
 
+                        @* Card Content *@
+                        <div class="card-body d-flex flex-column p-4">
+                            <h5 class="card-title fw-black mb-2">@recipe.Title.ToUpper()</h5>
 
-<div class="container mt-5 mb-5">
-    <div class="card border-0">
-        <QuickGrid Class="table fd-table" Items="FilteredRecipes" Pagination="pagination">
-            <PropertyColumn Property="recipe => recipe.Title" Sortable="true" Title="RECIPE NAME" Class="fd-column-title" />
-            <PropertyColumn Property="recipe => recipe.PreparationTime" Sortable="true" Title="PREP" />
-            <PropertyColumn Property="recipe => recipe.CookingDuration" Sortable="true" Title="COOK" />
-            <PropertyColumn Property="recipe => recipe.ServingSize" Sortable="true" Title="SERVINGS" />
-            <PropertyColumn Property="recipe => recipe.CreatedBy" Sortable="true" Title="AUTHOR" />
+                            <p class="card-text text-muted flex-grow-1 small" style="line-height: 1.5;">
+                                @(recipe.Description?.Length > 90 ? recipe.Description.Substring(0, 87) + "..." : recipe.Description)
+                            </p>
 
-            <TemplateColumn Context="recipe" Title="ACTIONS">
-                <div class="d-flex align-items-center gap-2">
-                    @* 1. Primary Action (Optional: Keep 'Details' visible for quick access) *@
-                    <a class="btn btn-sm fd-btn-black" href="@($"recipes/details?id={recipe.Id}")">DETAILS</a>
-
-                    @* 2. Dropdown Menu (The three dots) *@
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-dark border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-three-dots-vertical"></i>
-                        </button>
-                        <ul class="dropdown-menu shadow border-0">
-
-                            @* A. EDIT: Visible to everyone (User & Admin) *@
-                            <li>
-                                <a class="dropdown-item py-2" href="@($"recipes/edit?id={recipe.Id}")">
-                                    <i class="bi bi-pencil me-2 text-secondary"></i> Edit Settings
-                                </a>
-                            </li>
-
-                            @* B. DELETE: Visible ONLY to Admins *@
-                            <AuthorizeView Roles="Administrator">
-                                <Authorized>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <a class="dropdown-item py-2 text-danger" href="@($"recipes/delete?id={recipe.Id}")">
-                                            <i class="bi bi-trash me-2"></i> Delete Recipe
-                                        </a>
-                                    </li>
-                                </Authorized>
-                            </AuthorizeView>
-
-                        </ul>
+                            <div class="d-flex justify-content-between align-items-center mt-3 border-top border-dark pt-3">
+                                <div class="small fw-black">
+                                    <i class="bi bi-clock me-1"></i> @(recipe.PreparationTime + recipe.CookingDuration) MINS
+                                </div>
+                                <a href="recipes/details?id=@recipe.Id" class="btn btn-dark btn-sm fw-black px-4" style="border-radius: 0;">VIEW RECIPE</a>
+                            </div>
+                        </div>
                     </div>
+                    @* --- FULL CARD END --- *@
                 </div>
-            </TemplateColumn>
-        </QuickGrid>
-
-        <div class="fd-paginator-wrapper">
-            <Paginator State="@pagination" />
-        </div>
+            }
+        }
     </div>
 </div>
 
 <style>
-    /* ... (Keep your previous styles) ... */
-    :root {
-        --fd-yellow: #F5EB3B;
-        --fd-black: #222222;
-        --fd-grey: #757575;
-        --fd-light-grey: #F9F9F9;
-    }
-
-    /* ... (Paste the rest of your styles here) ... */
-
-    .recipes-page-header {
-        background-color: white;
-        padding: 50px 20px 30px 20px;
-        text-align: center;
-        border-bottom: 1px solid #eee;
-    }
-
-    .fd-breadcrumb {
-        font-size: 0.75rem;
-        letter-spacing: 2px;
-        color: var(--fd-grey);
-        font-weight: 700;
-        margin-bottom: 10px;
-    }
-
-    .fd-title {
-        font-family: 'Arial Black', Gadget, sans-serif;
-        font-size: 3.5rem;
+    .fw-black {
         font-weight: 900;
-        color: var(--fd-black);
-        letter-spacing: -2px;
-        margin-bottom: 5px;
     }
 
-    .fd-subtitle {
-        font-size: 1.1rem;
-        color: var(--fd-grey);
-    }
-
-    .search-filter-section {
-        background: white;
-        padding: 15px 0;
-        border-bottom: 2px solid var(--fd-black);
-    }
-
-    .fd-input {
-        border: 2px solid var(--fd-black) !important;
-        border-radius: 0 !important;
-        font-weight: 700;
-        height: 50px;
-    }
-
-    .fd-select {
-        border: 2px solid var(--fd-black) !important;
-        border-radius: 0 !important;
-        font-weight: 700;
-        height: 50px;
-        text-transform: uppercase;
-        cursor: pointer;
-    }
-
-    .fd-btn-primary {
-        background-color: var(--fd-yellow);
-        color: var(--fd-black);
-        border: 2px solid var(--fd-black);
+    .fd-recipe-card {
+        transition: transform 0.2s ease-in-out;
         border-radius: 0;
-        font-weight: 900;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s ease;
+        background: #fff;
     }
 
-        .fd-btn-primary:hover {
-            background-color: var(--fd-black);
-            color: var(--fd-yellow);
+        .fd-recipe-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
         }
 
-    .fd-table {
-        border-collapse: collapse;
+    .fd-card-img-container {
+        position: relative;
+        height: 220px;
+        overflow: hidden;
+        border-bottom: 2px solid #222;
+    }
+
+    .fd-card-img {
+        height: 100%;
         width: 100%;
+        object-fit: cover;
     }
 
-        .fd-table thead {
-            background-color: var(--fd-yellow);
-            color: black;
-        }
-
-            .fd-table thead th {
-                font-weight: 900;
-                font-size: 0.8rem;
-                letter-spacing: 1px;
-                padding: 15px !important;
-                border: none;
-                text-transform: uppercase;
-            }
-
-    .fd-column-title {
-        font-weight: 800;
-        color: var(--fd-black);
-    }
-
-    .fd-btn-black {
-        background-color: var(--fd-black);
-        color: white;
-        font-weight: 700;
-        border-radius: 0;
-    }
-
-        .fd-btn-black:hover {
-            background-color: var(--fd-yellow);
-            color: var(--fd-black);
-        }
-
-    .fd-paginator-wrapper {
-        padding: 20px;
-        display: flex;
-        justify-content: center;
-        background: var(--fd-light-grey);
-    }
-
-    /* New Dropdown specific styles to match your image */
-    .dropdown-item:active {
-        background-color: var(--fd-yellow);
-        color: black;
-    }
-
-    .dropdown-menu {
-        border-radius: 4px;
-        min-width: 200px;
+    .fd-category-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: #F5EB3B;
+        color: #000;
+        padding: 5px 15px;
+        font-size: 0.75rem;
+        font-weight: 900;
+        letter-spacing: 1px;
+        border: 1px solid #000;
     }
 </style>
 
 @code {
-    [SupplyParameterFromQuery(Name = "search")]
-    public string? SearchTerm { get; set; }
+    private List<Recipe>? allRecipes;
+    private List<Recipe>? filteredRecipes;
+    private List<Category>? categories;
 
-    private int selectedCategory = 0;
-    private List<Category> categories = new();
-    private PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
-    private BestRecipesContext context = default!;
+    private string SearchTerm { get; set; } = "";
+    private int SelectedCategoryId { get; set; } = 0;
 
-    private IQueryable<Recipe> FilteredRecipes
+    protected override async Task OnInitializedAsync()
     {
-        get
+        using var context = await DbFactory.CreateDbContextAsync();
+
+        allRecipes = await context.Recipe
+            .Include(r => r.Category)
+            .OrderByDescending(r => r.DateCreated)
+            .ToListAsync();
+
+        categories = await context.Category.ToListAsync();
+
+        filteredRecipes = allRecipes;
+    }
+
+    private void OnSearchInput(ChangeEventArgs e)
+    {
+        SearchTerm = e.Value?.ToString() ?? "";
+        FilterRecipes();
+    }
+
+    private void OnCategoryChange(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int id))
         {
-            var query = context.Recipe.AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(SearchTerm))
-            {
-                query = query.Where(c => c.Title.Contains(SearchTerm));
-            }
-
-            if (selectedCategory != 0)
-            {
-                query = query.Where(r => r.CategoryId == selectedCategory);
-            }
-
-            return query;
+            SelectedCategoryId = id;
+            FilterRecipes();
         }
     }
 
-    protected override void OnInitialized()
+    private void FilterRecipes()
     {
-        context = DbFactory.CreateDbContext();
-        categories = context.Category.ToList();
+        if (allRecipes == null) return;
+
+        filteredRecipes = allRecipes
+            .Where(r =>
+                (string.IsNullOrWhiteSpace(SearchTerm) ||
+                 r.Title.Contains(SearchTerm, StringComparison.OrdinalIgnoreCase)) &&
+                (SelectedCategoryId == 0 || r.CategoryId == SelectedCategoryId))
+            .ToList();
+
+        StateHasChanged();
     }
 
-    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+    private void ResetFilters()
+    {
+        SearchTerm = "";
+        SelectedCategoryId = 0;
+        filteredRecipes = allRecipes;
+        StateHasChanged();
+    }
 }
