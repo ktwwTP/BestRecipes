@@ -17,7 +17,6 @@
 }
 else
 {
-    @* --- EDIT HERO --- *@
     <div class="edit-hero">
         <div class="container">
             <nav class="fd-breadcrumb">RECIPES / EDIT / @Recipe.Title.ToUpper()</nav>
@@ -46,6 +45,62 @@ else
                             <InputTextArea @bind-Value="Recipe.Description" class="form-control fd-input" rows="2" />
                             <ValidationMessage For="() => Recipe.Description" class="text-danger" />
                         </div>
+
+                        @* --- INTEGRATED INGREDIENT SECTION (From Create Page) --- *@
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="fd-label m-0">INGREDIENTS</label>
+                                <button type="button" class="btn btn-link btn-sm p-0 text-dark fw-bold" @onclick="ShowIngredientModal">+ NEW INGREDIENT</button>
+                            </div>
+
+                            <div class="ingredient-container p-3 border-2 border-dark bg-light">
+                                @if (Recipe.RecipeIngredients != null)
+                                {
+                                    @foreach (var ri in Recipe.RecipeIngredients)
+                                    {
+                                        <div class="row g-2 mb-2 align-items-center">
+                                            @* Ingredient Dropdown *@
+                                            <div class="col-5">
+                                                <InputSelect @bind-Value="ri.IngredientId" class="form-control fd-input-sm">
+                                                    <option value="0">Select...</option>
+                                                    @if (allIngredients != null)
+                                                    {
+                                                        @foreach (var ing in allIngredients)
+                                                        {
+                                                            <option value="@ing.Id">@ing.Name</option>
+                                                        }
+                                                    }
+                                                </InputSelect>
+                                            </div>
+                                            @* Quantity *@
+                                            <div class="col-2">
+                                                <InputNumber @bind-Value="ri.Quantity" class="form-control fd-input-sm" placeholder="Qty" />
+                                            </div>
+                                            @* Unit *@
+                                            <div class="col-3">
+                                                <InputSelect @bind-Value="ri.Unit" class="form-control fd-input-sm">
+                                                    <option value="">Unit...</option>
+                                                    @foreach (var unit in CommonUnits)
+                                                    {
+                                                        <option value="@unit">@unit</option>
+                                                    }
+                                                </InputSelect>
+                                            </div>
+                                            @* Remove Button *@
+                                            <div class="col-2 text-end">
+                                                <button type="button" class="btn btn-sm btn-outline-danger border-0" @onclick="() => RemoveIngredientRow(ri)">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                <button type="button" class="btn btn-sm btn-outline-dark rounded-0 fw-bold mt-2 w-100" @onclick="AddIngredientRow">
+                                    <i class="bi bi-plus-lg"></i> ADD ANOTHER ROW
+                                </button>
+                            </div>
+                        </div>
+                        @* ---------------------------------------------------- *@
 
                         <div class="mb-4">
                             <label class="fd-label">DIRECTIONS (One step per line)</label>
@@ -94,8 +149,7 @@ else
                         </div>
 
                         @* --- ADMIN ONLY DELETE BUTTON --- *@
-                        <AuthorizeView Roles="Administrator">
-                            @* renaming context to avoid conflict with EditForm *@
+                        <AuthorizeView Roles="Admin">
                             <Authorized Context="authContext">
                                 <hr class="mt-4 mb-3" />
                                 <div class="d-grid">
@@ -105,7 +159,6 @@ else
                                 </div>
                             </Authorized>
                         </AuthorizeView>
-
                     </div>
 
                     @* PREVIEW IMAGE *@
@@ -119,6 +172,31 @@ else
                 </div>
             </div>
         </EditForm>
+    </div>
+}
+
+@* --- MODAL FOR NEW INGREDIENT (Same as Create Page) --- *@
+@if (showModal)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.6); z-index: 1050;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-0 shadow-lg">
+                <div class="modal-header bg-dark text-white rounded-0">
+                    <h5 class="modal-title fw-bold">NEW INGREDIENT</h5>
+                    <button type="button" class="btn-close btn-close-white" @onclick="CloseIngredientModal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="fd-label">NAME</label>
+                        <input type="text" @bind="newIng.Name" class="form-control fd-input" placeholder="e.g. Fresh Ginger" />
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary rounded-0" @onclick="CloseIngredientModal">CANCEL</button>
+                    <button type="button" class="btn fd-btn-save rounded-0" @onclick="QuickSaveIngredient">SAVE</button>
+                </div>
+            </div>
+        </div>
     </div>
 }
 
@@ -143,17 +221,22 @@ else
         margin-bottom: 8px;
     }
 
-    .fd-input {
+    .fd-input, .fd-input-sm {
         border: 2px solid #eee;
         border-radius: 0;
-        padding: 12px;
+        padding: 10px;
         font-weight: 500;
     }
 
-        .fd-input:focus {
-            border-color: var(--fd-yellow);
-            box-shadow: none;
-        }
+    .fd-input-sm {
+        padding: 5px;
+        font-size: 0.85rem;
+    }
+
+    .fd-input:focus {
+        border-color: var(--fd-yellow);
+        box-shadow: none;
+    }
 
     .fd-btn-save {
         background: var(--fd-black);
@@ -170,7 +253,6 @@ else
             transform: translateY(-2px);
         }
 
-    /* Reuse your core variables */
     :root {
         --fd-yellow: #F5EB3B;
         --fd-black: #222222;
@@ -185,19 +267,68 @@ else
     [SupplyParameterFromForm]
     private Recipe? Recipe { get; set; }
 
+    // Dropdown Data
+    private List<Ingredient>? allIngredients;
+    private readonly List<string> CommonUnits = new() { "Tsp", "Tbsp", "Cup", "ml", "L", "Gram", "Kg", "Pinch", "Whole", "Clove", "Can", "Packet" };
+
+    // Modal State
+    private bool showModal = false;
+    private Ingredient newIng = new() { Category = "General" };
+
     protected override async Task OnInitializedAsync()
     {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        using var context = await DbFactory.CreateDbContextAsync();
+
+        // Load Ingredients for the dropdown
+        allIngredients = await context.Ingredient.OrderBy(i => i.Name).ToListAsync();
+
         if (Recipe is null)
         {
-            using var context = await DbFactory.CreateDbContextAsync();
-            Recipe = await context.Recipe.FirstOrDefaultAsync(m => m.Id == Id);
+            // Load Recipe with its ingredients from the join table
+            Recipe = await context.Recipe
+                .Include(r => r.RecipeIngredients)
+                .FirstOrDefaultAsync(m => m.Id == Id);
 
             if (Recipe is null)
             {
                 NavigationManager.NavigateTo("notfound");
             }
+            else if (!Recipe.RecipeIngredients.Any())
+            {
+                // Ensure at least one empty row if none exist
+                AddIngredientRow();
+            }
         }
     }
+
+    // --- Ingredients Logic ---
+    private void AddIngredientRow() => Recipe?.RecipeIngredients?.Add(new RecipeIngredient());
+    private void RemoveIngredientRow(RecipeIngredient ri) => Recipe?.RecipeIngredients?.Remove(ri);
+    private void ShowIngredientModal() { newIng = new Ingredient() { Category = "General" }; showModal = true; }
+    private void CloseIngredientModal() => showModal = false;
+
+    private async Task QuickSaveIngredient()
+    {
+        if (string.IsNullOrWhiteSpace(newIng.Name)) return;
+
+        using var context = await DbFactory.CreateDbContextAsync();
+        var existing = await context.Ingredient.FirstOrDefaultAsync(i => i.Name.ToLower() == newIng.Name.ToLower());
+
+        if (existing == null)
+        {
+            context.Ingredient.Add(newIng);
+            await context.SaveChangesAsync();
+            // Reload list so the new item appears in dropdowns
+            allIngredients = await context.Ingredient.OrderBy(i => i.Name).ToListAsync();
+        }
+        showModal = false;
+    }
+    // -------------------------
 
     private async Task UpdateRecipe()
     {
@@ -205,11 +336,59 @@ else
 
         using var context = await DbFactory.CreateDbContextAsync();
 
-        // Update the timestamp
-        Recipe.DateUpdated = DateTime.Now;
-        Recipe.UpdatedBy = Recipe.CreatedBy; // Or your current user logic
+        // 1. Fetch the recipe currently in DB to track changes
+        var recipeInDb = await context.Recipe
+            .Include(r => r.RecipeIngredients)
+            .FirstOrDefaultAsync(r => r.Id == Recipe.Id);
 
-        context.Attach(Recipe).State = EntityState.Modified;
+        if (recipeInDb == null)
+        {
+            NavigationManager.NavigateTo("notfound");
+            return;
+        }
+
+        // 2. Update basic fields
+        context.Entry(recipeInDb).CurrentValues.SetValues(Recipe);
+        recipeInDb.DateUpdated = DateTime.Now;
+        recipeInDb.UpdatedBy = Recipe.CreatedBy;
+
+        // 3. Handle Child Collection (RecipeIngredients)
+        // A. Remove ingredients deleted in UI
+        foreach (var existingItem in recipeInDb.RecipeIngredients.ToList())
+        {
+            if (!Recipe.RecipeIngredients.Any(ri => ri.Id == existingItem.Id && ri.Id != 0))
+            {
+                context.RecipeIngredient.Remove(existingItem);
+            }
+        }
+
+        // B. Add or Update ingredients from UI
+        foreach (var itemModel in Recipe.RecipeIngredients)
+        {
+            // Skip rows where no ingredient was selected
+            if (itemModel.IngredientId == 0) continue;
+
+            var existingItem = recipeInDb.RecipeIngredients
+                .FirstOrDefault(ri => ri.Id == itemModel.Id && ri.Id != 0);
+
+            if (existingItem != null)
+            {
+                // Update
+                existingItem.IngredientId = itemModel.IngredientId;
+                existingItem.Quantity = itemModel.Quantity;
+                existingItem.Unit = itemModel.Unit;
+            }
+            else
+            {
+                // Insert New
+                recipeInDb.RecipeIngredients.Add(new RecipeIngredient
+                {
+                    IngredientId = itemModel.IngredientId,
+                    Quantity = itemModel.Quantity,
+                    Unit = itemModel.Unit
+                });
+            }
+        }
 
         try
         {
