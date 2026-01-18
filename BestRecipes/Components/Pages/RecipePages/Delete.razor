@@ -1,9 +1,13 @@
 ﻿@page "/recipes/delete"
 @rendermode InteractiveServer
 @using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Authorization @* 1. Add Authorization Namespace *@
 @using BestRecipes.Domain
 @inject IDbContextFactory<BestRecipes.Data.BestRecipesContext> DbFactory
 @inject NavigationManager NavigationManager
+
+@* 2. SECURITY LOCK: This prevents non-admins from accessing this page directly *@
+@attribute [Authorize(Roles = "Administrator")]
 
 <PageTitle>Delete Recipe</PageTitle>
 

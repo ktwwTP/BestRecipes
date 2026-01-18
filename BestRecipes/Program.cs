@@ -41,6 +41,7 @@ builder.Services.AddIdentityCore<BestRecipesUser>(options => options.SignIn.Requ
 
 builder.Services.AddSingleton<IEmailSender<BestRecipesUser>, IdentityNoOpEmailSender>();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

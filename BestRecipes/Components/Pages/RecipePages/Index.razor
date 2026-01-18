@@ -1,6 +1,7 @@
 ﻿@page "/recipes"
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.AspNetCore.Authorization
 @using BestRecipes.Domain
 @using BestRecipes.Data
 @implements IAsyncDisposable
@@ -10,10 +11,10 @@
 
 <PageTitle>Recipes | Food.com Style</PageTitle>
 
+@* ... (Your Header and Search Sections remain exactly the same) ... *@
 <div class="recipes-page-header">
     <div class="container">
         <div class="fd-breadcrumb">HOME / RECIPES</div>
-
         @if (!string.IsNullOrWhiteSpace(SearchTerm))
         {
             <h1 class="fd-title">RESULTS FOR "@SearchTerm.ToUpper()"</h1>
@@ -35,15 +36,9 @@
             <div class="col-lg-6">
                 <div class="search-box-large position-relative">
                     <span class="bi bi-search search-icon position-absolute" style="left: 15px; top: 15px;"></span>
-                    @* 1. Updated binding to handle immediate typing updates *@
-                    <input type="search"
-                           @bind="SearchTerm"
-                           @bind:event="oninput"
-                           class="form-control fd-input ps-5"
-                           placeholder="What would you like to make?" autofocus />
+                    <input type="search" @bind="SearchTerm" @bind:event="oninput" class="form-control fd-input ps-5" placeholder="What would you like to make?" autofocus />
                 </div>
             </div>
-
             <div class="col-lg-3 col-md-6">
                 <select @bind="selectedCategory" class="form-select fd-select">
                     <option value="0">ALL CATEGORIES</option>
@@ -53,7 +48,6 @@
                     }
                 </select>
             </div>
-
             <div class="col-lg-3 col-md-6">
                 <a href="recipes/create" class="btn fd-btn-primary w-100 text-decoration-none">
                     <span class="bi bi-plus-lg"></span> ADD A RECIPE
@@ -62,6 +56,8 @@
         </div>
     </div>
 </div>
+@* ... (End of Header/Search Sections) ... *@
+
 
 <div class="container mt-5 mb-5">
     <div class="card border-0">
@@ -73,9 +69,38 @@
             <PropertyColumn Property="recipe => recipe.CreatedBy" Sortable="true" Title="AUTHOR" />
 
             <TemplateColumn Context="recipe" Title="ACTIONS">
-                <div class="btn-group shadow-sm">
-                    <a class="btn btn-sm fd-btn-outline" href="@($"recipes/edit?id={recipe.Id}")">EDIT</a>
+                <div class="d-flex align-items-center gap-2">
+                    @* 1. Primary Action (Optional: Keep 'Details' visible for quick access) *@
                     <a class="btn btn-sm fd-btn-black" href="@($"recipes/details?id={recipe.Id}")">DETAILS</a>
+
+                    @* 2. Dropdown Menu (The three dots) *@
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-dark border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu shadow border-0">
+
+                            @* A. EDIT: Visible to everyone (User & Admin) *@
+                            <li>
+                                <a class="dropdown-item py-2" href="@($"recipes/edit?id={recipe.Id}")">
+                                    <i class="bi bi-pencil me-2 text-secondary"></i> Edit Settings
+                                </a>
+                            </li>
+
+                            @* B. DELETE: Visible ONLY to Admins *@
+                            <AuthorizeView Roles="Administrator">
+                                <Authorized>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item py-2 text-danger" href="@($"recipes/delete?id={recipe.Id}")">
+                                            <i class="bi bi-trash me-2"></i> Delete Recipe
+                                        </a>
+                                    </li>
+                                </Authorized>
+                            </AuthorizeView>
+
+                        </ul>
+                    </div>
                 </div>
             </TemplateColumn>
         </QuickGrid>
@@ -87,12 +112,15 @@
 </div>
 
 <style>
+    /* ... (Keep your previous styles) ... */
     :root {
         --fd-yellow: #F5EB3B;
         --fd-black: #222222;
         --fd-grey: #757575;
         --fd-light-grey: #F9F9F9;
     }
+
+    /* ... (Paste the rest of your styles here) ... */
 
     .recipes-page-header {
         background-color: white;
@@ -187,13 +215,6 @@
         color: var(--fd-black);
     }
 
-    .fd-btn-outline {
-        border: 1px solid var(--fd-black);
-        color: var(--fd-black);
-        font-weight: 700;
-        border-radius: 0;
-    }
-
     .fd-btn-black {
         background-color: var(--fd-black);
         color: white;
@@ -213,37 +234,38 @@
         background: var(--fd-light-grey);
     }
 
-    .search-icon {
-        z-index: 10;
-        font-weight: bold;
-        color: var(--fd-black);
+    /* New Dropdown specific styles to match your image */
+    .dropdown-item:active {
+        background-color: var(--fd-yellow);
+        color: black;
+    }
+
+    .dropdown-menu {
+        border-radius: 4px;
+        min-width: 200px;
     }
 </style>
 
 @code {
     [SupplyParameterFromQuery(Name = "search")]
-    public string? SearchTerm { get; set; } // Nullable string to handle empty URL params safely
+    public string? SearchTerm { get; set; }
 
     private int selectedCategory = 0;
     private List<Category> categories = new();
     private PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
     private BestRecipesContext context = default!;
 
-    // 2. FIXED LOGIC: Only filter if SearchTerm actually has text
     private IQueryable<Recipe> FilteredRecipes
     {
         get
         {
-            // Start with ALL recipes
             var query = context.Recipe.AsQueryable();
 
-            // Only apply search filter if the user has typed something
             if (!string.IsNullOrWhiteSpace(SearchTerm))
             {
                 query = query.Where(c => c.Title.Contains(SearchTerm));
             }
 
-            // Apply category filter if one is selected
             if (selectedCategory != 0)
             {
                 query = query.Where(r => r.CategoryId == selectedCategory);
