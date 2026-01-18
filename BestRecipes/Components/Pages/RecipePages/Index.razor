@@ -2,6 +2,7 @@
 @using Microsoft.EntityFrameworkCore
 @using BestRecipes.Domain
 @using BestRecipes.Data
+@using Microsoft.AspNetCore.Components.Authorization
 @inject IDbContextFactory<BestRecipesContext> DbFactory
 @rendermode InteractiveServer
 
@@ -43,7 +44,7 @@
         </div>
     </div>
 
-    @* --- GRID SECTION (RESTORING THE CARDS) --- *@
+    @* --- GRID SECTION --- *@
     <div class="row g-4">
         @if (filteredRecipes == null)
         {
@@ -84,7 +85,21 @@
                                 <div class="small fw-black">
                                     <i class="bi bi-clock me-1"></i> @(recipe.PreparationTime + recipe.CookingDuration) MINS
                                 </div>
-                                <a href="recipes/details?id=@recipe.Id" class="btn btn-dark btn-sm fw-black px-4" style="border-radius: 0;">VIEW RECIPE</a>
+
+                                @* --- ACTION BUTTONS --- *@
+                                <div class="d-flex gap-2">
+
+                                    @* 1. ADMIN DELETE BUTTON *@
+                                    <AuthorizeView Roles="Admin">
+                                        <Authorized>
+                                            <a href="recipes/delete?id=@recipe.Id" class="btn btn-danger btn-sm fw-black px-3" style="border-radius: 0;" title="Delete Recipe">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </a>
+                                        </Authorized>
+                                    </AuthorizeView>
+
+                                    <a href="recipes/details?id=@recipe.Id" class="btn btn-dark btn-sm fw-black px-4" style="border-radius: 0;">VIEW RECIPE</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -143,7 +158,10 @@
     private List<Recipe>? filteredRecipes;
     private List<Category>? categories;
 
-    private string SearchTerm { get; set; } = "";
+    // 2. CRITICAL FIX: Add [SupplyParameterFromQuery] so search from Home page works
+    [SupplyParameterFromQuery(Name = "search")]
+    public string SearchTerm { get; set; } = "";
+
     private int SelectedCategoryId { get; set; } = 0;
 
     protected override async Task OnInitializedAsync()
@@ -157,7 +175,15 @@
 
         categories = await context.Category.ToListAsync();
 
-        filteredRecipes = allRecipes;
+        // 3. Apply filter immediately if SearchTerm came from URL
+        if (!string.IsNullOrWhiteSpace(SearchTerm))
+        {
+            FilterRecipes();
+        }
+        else
+        {
+            filteredRecipes = allRecipes;
+        }
     }
 
     private void OnSearchInput(ChangeEventArgs e)
